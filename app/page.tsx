@@ -9,6 +9,7 @@ import {
   Flame,
   GraduationCap,
   Handshake,
+  Hash,
   LayoutDashboard,
   ListOrdered,
   MessageCircle,
@@ -17,7 +18,6 @@ import {
   Play,
   RefreshCw,
   Repeat2,
-  Hash,
   Shield,
   Shirt,
   Sparkles,
@@ -63,30 +63,35 @@ import {
 } from "@/lib/simulation";
 
 type View = "dashboard" | "club" | "history" | "squad" | "tactics" | "calendar" | "table" | "transfers" | "academy";
+type Icon = React.ComponentType<{ size?: number; strokeWidth?: number }>;
 
-const views: Array<{ key: View; label: string; icon: React.ComponentType<{ size?: number }> }> = [
-  { key: "dashboard", label: "Visão geral", icon: LayoutDashboard },
-  { key: "club", label: "Clube", icon: Building2 },
-  { key: "history", label: "História", icon: Newspaper },
-  { key: "squad", label: "Elenco", icon: Users },
-  { key: "tactics", label: "Tática", icon: Shield },
-  { key: "calendar", label: "Calendário", icon: CalendarDays },
-  { key: "table", label: "Tabela", icon: ListOrdered },
-  { key: "transfers", label: "Transferências", icon: Repeat2 },
-  { key: "academy", label: "Base", icon: GraduationCap },
+const views: Array<{ key: View; label: string; eyebrow: string; icon: Icon }> = [
+  { key: "dashboard", label: "Capa", eyebrow: "jornal", icon: LayoutDashboard },
+  { key: "club", label: "Clube", eyebrow: "diretoria", icon: Building2 },
+  { key: "history", label: "Historia", eyebrow: "arquivo", icon: Newspaper },
+  { key: "squad", label: "Elenco", eyebrow: "album", icon: Users },
+  { key: "tactics", label: "Tatica", eyebrow: "prancheta", icon: Shield },
+  { key: "calendar", label: "Agenda", eyebrow: "rodada", icon: CalendarDays },
+  { key: "table", label: "Tabela", eyebrow: "liga", icon: ListOrdered },
+  { key: "transfers", label: "Mercado", eyebrow: "classificados", icon: Repeat2 },
+  { key: "academy", label: "Base", eyebrow: "olheiros", icon: GraduationCap },
 ];
 
 const sectionMenus: Record<View, string[]> = {
-  dashboard: ["Resumo", "Eventos", "Próximo jogo"],
-  club: ["Identidade", "Estádio", "Patrocínios"],
-  history: ["Memória", "Jornal", "Rede social"],
-  squad: ["Elenco", "Numeração", "Contratos"],
-  tactics: ["Formação", "Perfil", "Sinergias"],
+  dashboard: ["Resumo", "Eventos", "Proximo jogo"],
+  club: ["Identidade", "Estadio", "Patrocinios"],
+  history: ["Memoria", "Jornal", "Rede social"],
+  squad: ["Elenco", "Numeracao", "Contratos"],
+  tactics: ["Formacao", "Perfil", "Sinergias"],
   calendar: ["Jogos", "Resultados"],
-  table: ["Classificação", "Critérios"],
+  table: ["Classificacao", "Criterios"],
   transfers: ["Mercado", "Alvos"],
   academy: ["Promessas", "Desenvolvimento"],
 };
+
+function cx(...classes: Array<string | false | null | undefined>) {
+  return classes.filter(Boolean).join(" ");
+}
 
 export default function Home() {
   const [clubName, setClubName] = useState("Aurora FC");
@@ -114,6 +119,7 @@ export default function Home() {
   function resetGame() {
     setState(createGame(clubName.trim() || "Aurora FC"));
     setView("dashboard");
+    setActiveSectionMenu("Resumo");
   }
 
   function changeView(nextView: View) {
@@ -141,7 +147,7 @@ export default function Home() {
       }
 
       if (!player.selected && selectedPlayers(draftTeam).length >= 11) {
-        draft.log.unshift("O XI já tem 11 jogadores. Remova alguém antes de escalar outro.");
+        draft.log.unshift("O XI ja tem 11 jogadores. Remova alguem antes de escalar outro.");
         return;
       }
 
@@ -178,7 +184,7 @@ export default function Home() {
       draft.log.unshift(`${player.name} chegou por ${money(player.value)}.`);
       addNews(draft, {
         source: "Mercado",
-        title: `${player.name} é apresentado como reforço`,
+        title: `${player.name} e apresentado como reforco`,
         body: `A diretoria investiu ${money(player.value)} para adicionar ${styleDefs[player.styles[0]].name.toLowerCase()} ao projeto esportivo.`,
         tone: "positive",
       });
@@ -204,7 +210,7 @@ export default function Home() {
       addNews(draft, {
         source: "Mercado",
         title: `${player.name} deixa o clube`,
-        body: `A saída abre espaço no elenco e rende ${money(player.value * 0.7)} ao orçamento.`,
+        body: `A saida abre espaco no elenco e rende ${money(player.value * 0.7)} ao orcamento.`,
         tone: "neutral",
       });
     });
@@ -228,7 +234,7 @@ export default function Home() {
       });
       addSocialPost(draft, {
         author: `@${draft.history.supporterGroup.replace(/\s/g, "").toLowerCase()}`,
-        content: `Cria da casa no profissional. ${player.name}, a torcida vai cobrar, mas vai abraçar também.`,
+        content: `Cria da casa no profissional. ${player.name}, a torcida vai cobrar, mas vai abracar tambem.`,
         sentiment: "up",
       });
       refreshLegends(draft);
@@ -260,7 +266,7 @@ export default function Home() {
       addNews(draft, {
         source: "Clube",
         title: `${sponsor.name} fecha com o ${userTeam(draft).name}`,
-        body: `O acordo ${sponsor.tier.toLowerCase()} injeta ${money(sponsor.upfront)} e reforça o crescimento comercial do clube.`,
+        body: `O acordo ${sponsor.tier.toLowerCase()} injeta ${money(sponsor.upfront)} e reforca o crescimento comercial do clube.`,
         tone: "positive",
       });
     });
@@ -276,7 +282,7 @@ export default function Home() {
       const cost = costs[kind];
 
       if (draft.budget < cost) {
-        draft.log.unshift("Orçamento insuficiente para essa melhoria do estádio.");
+        draft.log.unshift("Orcamento insuficiente para essa melhoria do estadio.");
         return;
       }
 
@@ -287,28 +293,28 @@ export default function Home() {
         draft.log.unshift(`${draft.stadium.name} ganhou novo setor. Capacidade: ${draft.stadium.capacity.toLocaleString("pt-BR")}.`);
         addNews(draft, {
           source: "Clube",
-          title: `${draft.stadium.name} terá novo setor`,
-          body: `A expansão aumenta a capacidade para ${draft.stadium.capacity.toLocaleString("pt-BR")} torcedores e sinaliza ambição estrutural.`,
+          title: `${draft.stadium.name} tera novo setor`,
+          body: `A expansao aumenta a capacidade para ${draft.stadium.capacity.toLocaleString("pt-BR")} torcedores e sinaliza ambicao estrutural.`,
           tone: "positive",
         });
       }
       if (kind === "atmosphere") {
         draft.stadium.atmosphere = Math.min(100, draft.stadium.atmosphere + 8);
         draft.fans = Math.min(100, draft.fans + 2);
-        draft.log.unshift("A atmosfera do estádio melhorou. A torcida começa a se reconhecer mais no clube.");
+        draft.log.unshift("A atmosfera do estadio melhorou. A torcida comeca a se reconhecer mais no clube.");
         addSocialPost(draft, {
           author: `@${draft.history.supporterGroup.replace(/\s/g, "").toLowerCase()}`,
-          content: `Arquibancada com mais cara de casa. Esse estádio está começando a ter alma.`,
+          content: "Arquibancada com mais cara de casa. Esse estadio esta comecando a ter alma.",
           sentiment: "up",
         });
       }
       if (kind === "facilities") {
         draft.stadium.facilities = Math.min(100, draft.stadium.facilities + 8);
-        draft.log.unshift("As instalações do clube foram modernizadas.");
+        draft.log.unshift("As instalacoes do clube foram modernizadas.");
         addNews(draft, {
           source: "Clube",
-          title: `Instalações modernizadas no centro do projeto`,
-          body: `A melhoria aumenta a estrutura para elenco e base, aproximando o clube de uma gestão mais profissional.`,
+          title: "Instalacoes modernizadas no centro do projeto",
+          body: "A melhoria aumenta a estrutura para elenco e base, aproximando o clube de uma gestao mais profissional.",
           tone: "positive",
         });
       }
@@ -316,62 +322,48 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-[#111413] text-[#f4f1ea]">
-      <header className="flex flex-col gap-4 border-b border-[#2b302d] bg-[#181c1a] px-5 py-4 shadow-[0_12px_30px_rgba(0,0,0,0.22)] lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-xs font-extrabold uppercase text-[#d4af37]">Matchday room</p>
-          <h1 className="text-2xl font-black text-[#f4f1ea]">Soccer Architect</h1>
+    <main className="soccer-app min-h-screen">
+      <header className="masthead">
+        <div className="masthead__brand">
+          <span className="kicker">Gazeta interativa</span>
+          <h1>Soccer Architect</h1>
+          <p>Almanaque jogavel de clube, tatico por estilos e temporada simulada.</p>
         </div>
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-          <label className="grid gap-1 text-xs font-bold uppercase text-[#aeb7b0]">
-            Clube
-            <input
-              value={clubName}
-              maxLength={24}
-              onChange={(event) => updateClubName(event.target.value)}
-              className="h-10 rounded-md border border-[#343b37] bg-[#0e1110] px-3 text-sm text-[#f4f1ea] outline-none focus:border-[#d4af37]"
-            />
+        <div className="masthead__edition">
+          <label className="club-ticket">
+            <span>Clube inscrito</span>
+            <input value={clubName} maxLength={24} onChange={(event) => updateClubName(event.target.value)} />
           </label>
-          <button onClick={resetGame} className="inline-flex h-10 items-center justify-center gap-2 rounded-md bg-[#d4af37] px-4 font-extrabold text-[#111413]">
-            <RefreshCw size={17} />
-            Nova carreira
-          </button>
+          <Button primary onClick={resetGame} icon={RefreshCw}>Nova carreira</Button>
         </div>
       </header>
 
-      <div className="grid min-h-[calc(100vh-73px)] grid-cols-1 lg:grid-cols-[230px_minmax(0,1fr)]">
-        <aside className="flex gap-2 overflow-x-auto border-b border-[#2b302d] bg-[#161a18] p-4 lg:flex-col lg:border-b-0 lg:border-r">
-          {views.map((item) => {
-            const Icon = item.icon;
+      <div className="app-frame">
+        <aside className="nav-index" aria-label="Secoes do almanaque">
+          {views.map((item, index) => {
+            const IconComponent = item.icon;
             return (
-              <button
-                key={item.key}
-                onClick={() => changeView(item.key)}
-                className={`inline-flex h-10 shrink-0 items-center gap-2 rounded-md border px-3 text-left text-sm ${
-                  view === item.key ? "border-[#d4af37] bg-[#2a2518] text-[#f4f1ea]" : "border-transparent bg-[#161a18] text-[#aeb7b0] hover:border-[#3a413d] hover:text-[#f4f1ea]"
-                }`}
-              >
-                <Icon size={17} />
-                {item.label}
+              <button key={item.key} onClick={() => changeView(item.key)} className={cx("nav-index__item", view === item.key && "is-active")}>
+                <span className="nav-index__number">{String(index + 1).padStart(2, "0")}</span>
+                <IconComponent size={18} />
+                <span>
+                  <small>{item.eyebrow}</small>
+                  {item.label}
+                </span>
               </button>
             );
           })}
         </aside>
 
-        <section className="p-5">
-          <div className="mb-5 flex flex-wrap gap-2 rounded-lg border border-[#303632] bg-[#1b201d] p-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)]">
+        <section className="workspace">
+          <nav className="paper-tabs" aria-label="Secoes da pagina">
             {sectionMenus[view].map((item) => (
-              <button
-                key={item}
-                onClick={() => setActiveSectionMenu(item)}
-                className={`h-9 rounded-md px-3 text-sm font-bold ${
-                  activeSectionMenu === item ? "bg-[#f4f1ea] text-[#111413]" : "text-[#aeb7b0] hover:bg-[#242a27] hover:text-[#f4f1ea]"
-                }`}
-              >
+              <button key={item} onClick={() => setActiveSectionMenu(item)} className={cx("paper-tab", activeSectionMenu === item && "is-active")}>
                 {item}
               </button>
             ))}
-          </div>
+          </nav>
+
           {view === "dashboard" && (
             <Dashboard section={activeSectionMenu} state={state} position={position} nextLabel={next ? matchLabel(next, state) : "Temporada encerrada"} buffs={buffs.active} />
           )}
@@ -387,20 +379,18 @@ export default function Home() {
                   ...draft.sponsors.filter((sponsor) => sponsor.signed),
                   ...createSponsorOffers(),
                 ].slice(0, 6);
-                draft.log.unshift("Novas propostas de patrocínio chegaram à mesa.");
+                draft.log.unshift("Novas propostas de patrocinio chegaram a mesa.");
               })}
               onUpgradeStadium={upgradeStadium}
             />
           )}
 
-          {view === "history" && (
-            <HistoryView section={activeSectionMenu} state={state} />
-          )}
+          {view === "history" && <HistoryView section={activeSectionMenu} state={state} />}
 
           {view === "squad" && (
-            <ViewShell title="Elenco" action={<Button onClick={() => update(autoSelect)} icon={Dumbbell}>Escalar melhores</Button>}>
+            <ViewShell title="Album do elenco" eyebrow="fichario do clube" action={<Button onClick={() => update(autoSelect)} icon={Dumbbell}>Escalar melhores</Button>}>
               {activeSectionMenu === "Contratos" ? (
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="mosaic-grid compact">
                   <Metric label="Folha estimada" value={money(team.squad.reduce((sum, player) => sum + player.value * 0.03, 0))} />
                   <Metric label="Valor do elenco" value={money(team.squad.reduce((sum, player) => sum + player.value, 0))} />
                   <Metric label="Jogadores" value={team.squad.length.toString()} />
@@ -417,83 +407,71 @@ export default function Home() {
           )}
 
           {view === "tactics" && (
-            <ViewShell title="Tática" action={<Button primary onClick={() => update(simulateNextUserMatch)} icon={Play}>Simular próximo jogo</Button>}>
-              <div className="grid gap-4 xl:grid-cols-[minmax(0,1.1fr)_minmax(340px,0.9fr)]">
+            <ViewShell title="Prancheta do tecnico" eyebrow="formacao e sinergias" action={<Button primary onClick={() => update(simulateNextUserMatch)} icon={Play}>Simular proximo jogo</Button>}>
+              <div className="grid gap-5 xl:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
                 <div className="min-w-0">
                   {activeSectionMenu !== "Perfil" && (
-                  <>
-                  <div className="grid gap-3 md:grid-cols-2">
-                    <label className="grid gap-2 text-xs font-bold uppercase text-[#aeb7b0]">
-                      Estratégia
-                      <select
-                        value={state.strategy}
-                        onChange={(event) => update((draft) => {
-                          draft.strategy = event.target.value as StrategyKey;
-                          userTeam(draft).strategy = event.target.value as StrategyKey;
-                        })}
-                        className="h-10 rounded-md border border-[#343b37] bg-[#101312] px-3 text-[#f4f1ea]"
-                      >
-                        {Object.entries(strategies).map(([key, strategy]) => (
-                          <option key={key} value={key}>{strategy.name}</option>
-                        ))}
-                      </select>
-                    </label>
-                    <label className="grid gap-2 text-xs font-bold uppercase text-[#aeb7b0]">
-                      Esquema
-                      <select
-                        value={state.formation}
-                        onChange={(event) => update((draft) => setFormation(draft, event.target.value as FormationKey))}
-                        className="h-10 rounded-md border border-[#343b37] bg-[#101312] px-3 text-[#f4f1ea]"
-                      >
-                        {Object.values(formationDefs).map((formation) => (
-                          <option key={formation.key} value={formation.key}>{formation.name}</option>
-                        ))}
-                      </select>
-                    </label>
-                  </div>
-                  <div className="mt-4 grid gap-3 md:grid-cols-2">
-                    <InfoCard title={strategies[state.strategy].name} muted={strategies[state.strategy].desc} />
-                    <InfoCard title={formationDefs[state.formation].name} muted={`Forte: ${formationDefs[state.formation].strength} Fraco: ${formationDefs[state.formation].weakness}`} />
-                  </div>
-                  <Formation
-                    state={state}
-                    selectedSlotId={selectedSlotId}
-                    onSelectSlot={setSelectedSlotId}
-                    onCloseModal={() => setSelectedSlotId(null)}
-                    onAssign={(slotId, playerId) => update((draft) => assignPlayerToSlot(draft, slotId, playerId))}
-                  />
-                  </>
+                    <>
+                      <div className="grid gap-3 md:grid-cols-2">
+                        <PaperSelect
+                          label="Estrategia"
+                          value={state.strategy}
+                          onChange={(value) => update((draft) => {
+                            draft.strategy = value as StrategyKey;
+                            userTeam(draft).strategy = value as StrategyKey;
+                          })}
+                          options={Object.entries(strategies).map(([key, strategy]) => ({ value: key, label: strategy.name }))}
+                        />
+                        <PaperSelect
+                          label="Esquema"
+                          value={state.formation}
+                          onChange={(value) => update((draft) => setFormation(draft, value as FormationKey))}
+                          options={Object.values(formationDefs).map((formation) => ({ value: formation.key, label: formation.name }))}
+                        />
+                      </div>
+                      <div className="mt-4 grid gap-3 md:grid-cols-2">
+                        <InfoCard title={strategies[state.strategy].name} muted={strategies[state.strategy].desc} tone="green" />
+                        <InfoCard title={formationDefs[state.formation].name} muted={`Forte: ${formationDefs[state.formation].strength} Fraco: ${formationDefs[state.formation].weakness}`} />
+                      </div>
+                      <Formation
+                        state={state}
+                        selectedSlotId={selectedSlotId}
+                        onSelectSlot={setSelectedSlotId}
+                        onCloseModal={() => setSelectedSlotId(null)}
+                        onAssign={(slotId, playerId) => update((draft) => assignPlayerToSlot(draft, slotId, playerId))}
+                      />
+                    </>
                   )}
                 </div>
                 <div className="min-w-0">
                   {activeSectionMenu !== "Sinergias" && (
-                  <>
-                  <h3 className="mb-3 text-lg font-extrabold">Perfil coletivo</h3>
-                  <div className="mb-4 grid gap-3 md:grid-cols-2">
-                    <Metric label="Ofensividade" value={`${tacticalProfile.attack}/100`} />
-                    <Metric label="Defesa" value={`${tacticalProfile.defense}/100`} />
-                    <Metric label="Controle" value={`${tacticalProfile.control}/100`} />
-                    <Metric label="Encaixe" value={`${tacticalProfile.fit}%`} />
-                  </div>
-                  <InfoCard
-                    title={tacticalProfile.missing ? `${tacticalProfile.missing} posição sem jogador` : "XI completo"}
-                    muted="Atacantes, pontas e meias aumentam ofensividade; volantes, laterais, zagueiros e goleiro fortalecem defesa. Improvisações reduzem o encaixe."
-                  />
-                  </>
+                    <>
+                      <SectionTitle icon={Flame} title="Relatorio do auxiliar" />
+                      <div className="mb-4 grid gap-3 sm:grid-cols-2">
+                        <Metric label="Ofensividade" value={`${tacticalProfile.attack}/100`} />
+                        <Metric label="Defesa" value={`${tacticalProfile.defense}/100`} />
+                        <Metric label="Controle" value={`${tacticalProfile.control}/100`} />
+                        <Metric label="Encaixe" value={`${tacticalProfile.fit}%`} />
+                      </div>
+                      <InfoCard
+                        title={tacticalProfile.missing ? `${tacticalProfile.missing} posicao sem jogador` : "XI completo"}
+                        muted="Atacantes, pontas e meias aumentam ofensividade; volantes, laterais, zagueiros e goleiro fortalecem defesa. Improvisacoes reduzem o encaixe."
+                      />
+                    </>
                   )}
                   {activeSectionMenu !== "Perfil" && (
-                  <>
-                  <h3 className="mb-3 mt-5 text-lg font-extrabold">Sinergia por estilo</h3>
-                  <div className="grid gap-3">
-                    {Object.entries(styleDefs).map(([key, def]) => {
-                      const count = buffs.counts[key as keyof typeof buffs.counts] ?? 0;
-                      const active = count >= def.threshold;
-                      return (
-                        <InfoCard key={key} title={`${def.name} ${active ? "ativo" : `${count}/${def.threshold}`}`} muted={`${def.buff}: ${def.desc}`} />
-                      );
-                    })}
-                  </div>
-                  </>
+                    <>
+                      <SectionTitle className="mt-6" icon={Sparkles} title="Carimbos de estilo" />
+                      <div className="grid gap-3">
+                        {Object.entries(styleDefs).map(([key, def]) => {
+                          const count = buffs.counts[key as keyof typeof buffs.counts] ?? 0;
+                          const active = count >= def.threshold;
+                          return (
+                            <InfoCard key={key} title={`${def.name} ${active ? "ativo" : `${count}/${def.threshold}`}`} muted={`${def.buff}: ${def.desc}`} tone={active ? "gold" : "neutral"} />
+                          );
+                        })}
+                      </div>
+                    </>
                   )}
                 </div>
               </div>
@@ -501,13 +479,15 @@ export default function Home() {
           )}
 
           {view === "calendar" && (
-            <ViewShell title="Calendário" action={<Button onClick={() => update(simulateAll)} icon={Play}>Simular até o fim</Button>}>
-              <div className="grid gap-3">
+            <ViewShell title="Boletim da rodada" eyebrow="agenda de temporada" action={<Button onClick={() => update(simulateAll)} icon={Play}>Simular ate o fim</Button>}>
+              <div className="fixture-list">
                 {state.schedule.filter((match) => activeSectionMenu === "Resultados" ? match.played : !match.played).map((match) => (
-                  <InfoCard
+                  <FixtureStrip
                     key={match.id}
-                    title={`Semana ${match.week}: ${matchLabel(match, state)}`}
-                    muted={match.played ? `${match.goalsHome} x ${match.goalsAway}` : "A jogar"}
+                    week={match.week}
+                    label={matchLabel(match, state)}
+                    result={match.played ? `${match.goalsHome} x ${match.goalsAway}` : "A jogar"}
+                    played={match.played}
                   />
                 ))}
               </div>
@@ -515,95 +495,69 @@ export default function Home() {
           )}
 
           {view === "table" && (
-            <ViewShell title="Tabela da liga">
-              {activeSectionMenu === "Critérios" ? (
-                <div className="grid gap-3 md:grid-cols-3">
-                  <InfoCard title="Pontuação" muted="Vitória vale 3 pontos, empate vale 1 ponto e derrota não pontua." />
-                  <InfoCard title="Desempate" muted="A classificação usa pontos, saldo de gols e gols marcados." />
-                  <InfoCard title="Seu clube" muted="A linha do clube criado aparece destacada na tabela." />
+            <ViewShell title="Tabela impressa da liga" eyebrow="classificacao oficial">
+              {activeSectionMenu === "Criterios" ? (
+                <div className="mosaic-grid compact">
+                  <InfoCard title="Pontuacao" muted="Vitoria vale 3 pontos, empate vale 1 ponto e derrota nao pontua." />
+                  <InfoCard title="Desempate" muted="A classificacao usa pontos, saldo de gols e gols marcados." />
+                  <InfoCard title="Seu clube" muted="A linha do clube criado aparece destacada como recorte de jornal." />
                 </div>
               ) : (
-              <div className="overflow-x-auto rounded-lg">
-                <table className="w-full border-collapse text-left">
-                  <thead>
-                    <tr className="bg-[#252a26] text-xs uppercase text-[#aeb7b0]">
-                      {["#", "Clube", "J", "V", "E", "D", "GP", "GC", "SG", "Pts"].map((head) => <th key={head} className="border-b border-[#303632] p-3">{head}</th>)}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {table.map((row, index) => (
-                      <tr key={row.id} className={row.isUser ? "bg-[#2a2518] font-extrabold" : "bg-[#1b201d]"}>
-                        <td className="border-b border-[#303632] p-3">{index + 1}</td>
-                        <td className="border-b border-[#303632] p-3">{row.name}</td>
-                        <td className="border-b border-[#303632] p-3">{row.stats.played}</td>
-                        <td className="border-b border-[#303632] p-3">{row.stats.won}</td>
-                        <td className="border-b border-[#303632] p-3">{row.stats.drawn}</td>
-                        <td className="border-b border-[#303632] p-3">{row.stats.lost}</td>
-                        <td className="border-b border-[#303632] p-3">{row.stats.gf}</td>
-                        <td className="border-b border-[#303632] p-3">{row.stats.ga}</td>
-                        <td className="border-b border-[#303632] p-3">{row.stats.gf - row.stats.ga}</td>
-                        <td className="border-b border-[#303632] p-3">{row.stats.points}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                <PaperTable rows={table} />
               )}
             </ViewShell>
           )}
 
           {view === "transfers" && (
-            <ViewShell title="Mercado" action={<Button onClick={() => update((draft) => {
+            <ViewShell title="Classificados esportivos" eyebrow="mercado de jogadores" action={<Button onClick={() => update((draft) => {
               draft.market = Array.from({ length: 8 }, () => createPlayer({ base: 58, age: 22 }));
             })} icon={RefreshCw}>Atualizar mercado</Button>}>
               {activeSectionMenu === "Alvos" ? (
-                <div className="grid gap-3 md:grid-cols-3">
-                  <InfoCard title="Sugestão" muted="Procure jogadores com estilos que faltam para ativar buffs coletivos." />
-                  <InfoCard title="Orçamento" muted={`Disponível: ${money(state.budget)}`} />
-                  <InfoCard title="Prioridade" muted="Contrate por encaixe tático, não apenas por OVR." />
+                <div className="mosaic-grid compact">
+                  <InfoCard title="Sugestao" muted="Procure jogadores com estilos que faltam para ativar buffs coletivos." />
+                  <InfoCard title="Orcamento" muted={`Disponivel: ${money(state.budget)}`} tone="gold" />
+                  <InfoCard title="Prioridade" muted="Contrate por encaixe tatico, nao apenas por OVR." />
                 </div>
               ) : (
-              <PlayerGrid players={state.market} strategy={state.strategy} onNumberChange={updateShirtNumber} action={(player) => (
-                <Button onClick={() => buyPlayer(player.id)} disabled={state.budget < player.value} icon={BadgeEuro}>
-                  Comprar {money(player.value)}
-                </Button>
-              )} />
+                <PlayerGrid players={state.market} strategy={state.strategy} onNumberChange={updateShirtNumber} action={(player) => (
+                  <Button onClick={() => buyPlayer(player.id)} disabled={state.budget < player.value} icon={BadgeEuro}>
+                    Proposta {money(player.value)}
+                  </Button>
+                )} variant="classified" />
               )}
             </ViewShell>
           )}
 
           {view === "academy" && (
-            <ViewShell title="Base do clube" action={<Button primary onClick={() => update((draft) => {
+            <ViewShell title="Relatorio de olheiros" eyebrow="base do clube" action={<Button primary onClick={() => update((draft) => {
               const youth = createYouth();
               draft.academy.unshift(youth);
               draft.log.unshift(`${youth.name} apareceu na base com estilo ${styleDefs[youth.styles[0]].name}.`);
               addNews(draft, {
                 source: "Base",
-                title: `${youth.name} chama atenção nos treinos da base`,
-                body: `Olheiros internos veem potencial ${youth.potential} e traços de ${styleDefs[youth.styles[0]].name.toLowerCase()} no jovem.`,
+                title: `${youth.name} chama atencao nos treinos da base`,
+                body: `Olheiros internos veem potencial ${youth.potential} e tracos de ${styleDefs[youth.styles[0]].name.toLowerCase()} no jovem.`,
                 tone: "positive",
               });
               addSocialPost(draft, {
                 author: "@base_watch",
-                content: `${youth.name} é nome para guardar. Ainda cru, mas tem cheiro de projeto de longo prazo.`,
+                content: `${youth.name} e nome para guardar. Ainda cru, mas tem cheiro de projeto de longo prazo.`,
                 sentiment: "up",
               });
             })} icon={Sparkles}>Gerar jovem</Button>}>
               {activeSectionMenu === "Desenvolvimento" ? (
-                <div className="grid gap-3 md:grid-cols-3">
+                <div className="mosaic-grid compact">
                   <Metric label="Promessas" value={state.academy.length.toString()} />
                   <Metric label="Maior potencial" value={Math.max(...state.academy.map((player) => player.potential), 0).toString()} />
                   <InfoCard title="Plano" muted="Promova jovens que combinem potencial alto com estilos ausentes no elenco principal." />
                 </div>
               ) : (
-              <>
-              <div className="mb-4 rounded-lg border border-[#303632] bg-[#1b201d] p-4 text-[#aeb7b0]">
-                <strong className="text-[#f4f1ea]">Ideia central:</strong> jovens nascem com potencial, personalidade tática e estilos raros. A graça é formar elencos que ativam buffs coletivos.
-              </div>
-              <PlayerGrid players={state.academy} strategy={state.strategy} onNumberChange={updateShirtNumber} action={(player) => (
-                <Button onClick={() => promoteYouth(player.id)}>Promover</Button>
-              )} />
-              </>
+                <>
+                  <InfoCard className="mb-4" title="Caderno da base" muted="Jovens nascem com potencial, personalidade tatica e estilos raros. A graca e formar elencos que ativam buffs coletivos." tone="green" />
+                  <PlayerGrid players={state.academy} strategy={state.strategy} onNumberChange={updateShirtNumber} action={(player) => (
+                    <Button onClick={() => promoteYouth(player.id)}>Promover</Button>
+                  )} variant="scout" />
+                </>
               )}
             </ViewShell>
           )}
@@ -613,143 +567,67 @@ export default function Home() {
   );
 }
 
-function HistoryView({ section, state }: { section: string; state: GameState }) {
+function Dashboard({ section, state, position, nextLabel, buffs }: { section: string; state: GameState; position: number; nextLabel: string; buffs: ReturnType<typeof calculateBuffs>["active"] }) {
   const team = userTeam(state);
-  const reputation = Object.entries(state.history.reputation).sort((a, b) => b[1] - a[1]);
+
+  if (section === "Proximo jogo") {
+    return (
+      <ViewShell title="Poster de confronto" eyebrow="proxima chamada">
+        <div className="poster-grid">
+          <FixturePoster team={team.name} nextLabel={nextLabel} formation={formationDefs[state.formation].name} power={Math.round(teamPower(team, state))} />
+          <MiniPitch state={state} />
+        </div>
+      </ViewShell>
+    );
+  }
+
+  if (section === "Eventos") {
+    return (
+      <ViewShell title="Ultimas tiras de noticia" eyebrow="radio do clube">
+        <div className="news-tape-list">
+          {state.log.slice(0, 8).map((event, index) => (
+            <article key={`${event}-${index}`} className="news-tape">
+              <span>Plantao {String(index + 1).padStart(2, "0")}</span>
+              <p>{event}</p>
+            </article>
+          ))}
+        </div>
+      </ViewShell>
+    );
+  }
 
   return (
-    <ViewShell title="História" action={<span className="rounded-full bg-[#252a26] px-3 py-2 text-sm font-bold text-[#d9eee0]">Fundado em {state.history.foundedYear}</span>}>
-      <div className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
-        {section === "Memória" && (
-        <section className="grid gap-4">
-          <div className="rounded-lg border border-[#303632] bg-[#1b201d] p-4">
-            <div className="mb-4 flex items-center gap-4">
-              <div
-                className="grid h-20 w-20 place-items-center rounded-lg border-2 text-4xl font-black"
-                style={{
-                  backgroundColor: state.club.primaryColor,
-                  borderColor: state.club.secondaryColor,
-                  color: state.club.secondaryColor,
-                }}
-              >
-                {state.club.crestSymbol.slice(0, 2).toUpperCase()}
-              </div>
-              <div>
-                <p className="text-xs font-extrabold uppercase text-[#d4af37]">Memória do clube</p>
-                <h3 className="text-3xl font-black">{team.name}</h3>
-                <p className="text-[#aeb7b0]">{state.club.motto}</p>
-              </div>
-            </div>
+    <div className="front-page">
+      <section className="front-page__hero">
+        <div>
+          <span className="kicker red">Temporada {state.year}</span>
+          <h2>{team.name} busca identidade antes do placar</h2>
+          <p>Monte um XI por estilos, ative buffs coletivos e veja se a tatica sobrevive a uma temporada inteira.</p>
+        </div>
+        <MiniPitch state={state} />
+      </section>
 
-            <div className="grid gap-3 md:grid-cols-2">
-              <InfoCard title="Rivalidade local" muted={state.history.rivalName} />
-              <InfoCard title="Torcida organizada" muted={state.history.supporterGroup} />
-              <InfoCard title="Maior vitória" muted={state.history.records.biggestWin} />
-              <InfoCard title="Sequência invicta" muted={`${state.history.records.unbeatenRun} jogos`} />
-              <InfoCard title="Artilheiro histórico" muted={`${state.history.records.topScorerName} (${state.history.records.topScorerGoals} gols)`} />
-              <InfoCard title="Cara da base" muted={`${state.history.records.academyFaceName} (${state.history.records.academyFaceLegacy} legado)`} />
-            </div>
-          </div>
-
-          <div className="rounded-lg border border-[#303632] bg-[#1b201d] p-4">
-            <div className="mb-3 flex items-center gap-2">
-              <Trophy size={18} />
-              <h3 className="text-lg font-extrabold">Conquistas e Ídolos</h3>
-            </div>
-            <div className="mb-4 grid gap-2">
-              {state.history.trophies.length ? state.history.trophies.map((trophy) => (
-                <InfoCard key={trophy} title={trophy} muted="Título oficial do projeto" />
-              )) : <InfoCard muted="Nenhuma conquista ainda. A sala de troféus espera seu primeiro capítulo." />}
-            </div>
-            <div className="grid gap-2">
-              {state.history.legends.length ? state.history.legends.map((legend) => (
-                <div key={legend.playerId} className="flex items-center justify-between gap-3 rounded-lg border border-[#303632] bg-[#101312] p-3">
-                  <div>
-                    <strong className="block">{legend.name}</strong>
-                    <span className="text-sm text-[#aeb7b0]">{legend.reason}</span>
-                  </div>
-                  <span className="inline-flex items-center gap-1 rounded-full bg-[#252a26] px-2 py-1 text-xs font-black text-[#d9eee0]">
-                    <Star size={13} />
-                    {legend.legacy}
-                  </span>
-                </div>
-              )) : <InfoCard muted="Ídolos ainda serão construídos por jogos, gols e momentos de base." />}
-            </div>
-          </div>
-
-          <div className="rounded-lg border border-[#303632] bg-[#1b201d] p-4">
-            <div className="mb-3 flex items-center gap-2">
-              <Flame size={18} />
-              <h3 className="text-lg font-extrabold">Reputação por estilo</h3>
-            </div>
-            <div className="grid gap-3">
-              {reputation.map(([key, value]) => (
-                <div key={key}>
-                  <div className="mb-1 flex justify-between text-sm">
-                    <span>{strategies[key as StrategyKey].name}</span>
-                    <span className="text-[#aeb7b0]">{value}/100</span>
-                  </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-[#101312]">
-                    <div className="h-full rounded-full bg-[#d4af37]" style={{ width: `${value}%` }} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-        )}
-
-        {section !== "Memória" && (
-        <section className="grid gap-4">
-          {section === "Jornal" && (
-          <div>
-            <div className="mb-3 flex items-center gap-2">
-              <Newspaper size={18} />
-              <h3 className="text-lg font-extrabold">Jornal da Liga</h3>
-            </div>
-            <div className="grid gap-3">
-              {state.history.news.map((item) => (
-                <article key={item.id} className="rounded-lg border border-[#303632] bg-[#1b201d] p-4">
-                  <div className="mb-2 flex flex-wrap items-center gap-2">
-                    <span className={`rounded-full px-2 py-1 text-xs font-black ${item.tone === "positive" ? "bg-[#d4af37] text-[#0b0f0e]" : item.tone === "negative" ? "bg-[#e46f61] text-[#0b0f0e]" : "bg-[#252a26] text-[#d9eee0]"}`}>
-                      {item.source}
-                    </span>
-                    <span className="text-xs font-bold uppercase text-[#aeb7b0]">Semana {item.week}</span>
-                  </div>
-                  <strong className="block text-lg">{item.title}</strong>
-                  <p className="mt-1 text-[#aeb7b0]">{item.body}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-          )}
-
-          {section === "Rede social" && (
-          <div>
-            <div className="mb-3 flex items-center gap-2">
-              <MessageCircle size={18} />
-              <h3 className="text-lg font-extrabold">Rede social</h3>
-            </div>
-            <div className="grid gap-3">
-              {state.history.socials.map((post) => (
-                <article key={post.id} className="rounded-lg border border-[#303632] bg-[#1b201d] p-3">
-                  <div className="mb-1 flex items-center justify-between gap-3">
-                    <strong>{post.author}</strong>
-                    <span className={`rounded-full px-2 py-1 text-xs font-black ${post.sentiment === "up" ? "bg-[#d4af37] text-[#0b0f0e]" : post.sentiment === "down" ? "bg-[#e46f61] text-[#0b0f0e]" : "bg-[#252a26] text-[#d9eee0]"}`}>
-                      {post.sentiment === "up" ? "alta" : post.sentiment === "down" ? "crítica" : "neutro"}
-                    </span>
-                  </div>
-                  <p className="text-[#d9eee0]">{post.content}</p>
-                  <span className="mt-2 block text-xs font-bold uppercase text-[#aeb7b0]">Semana {post.week}</span>
-                </article>
-              ))}
-            </div>
-          </div>
-          )}
-        </section>
-        )}
+      <div className="front-page__metrics">
+        <Metric label="Posicao" value={`${position}o`} />
+        <Metric label="Proximo jogo" value={nextLabel} />
+        <Metric label="Forca XI" value={Math.round(teamPower(team, state)).toString()} />
+        <Metric label="Orcamento" value={money(state.budget)} />
       </div>
-    </ViewShell>
+
+      <section className="radio-block">
+        <div>
+          <span className="kicker">Radio do Clube</span>
+          <h3>Boletim tatico da redacao</h3>
+        </div>
+        <p>{buffs.length ? `O XI tem ${buffs.length} carimbo(s) ativo(s), com destaque para ${buffs[0].buff}.` : "O vestiario ainda procura uma combinacao de estilos capaz de virar manchete."}</p>
+      </section>
+
+      <div className="mosaic-grid">
+        {buffs.length ? buffs.map((buff) => (
+          <InfoCard key={buff.key} title={`${buff.buff} +${buff.points}`} muted={`${buff.count}/${buff.threshold} jogadores com ${buff.name}. ${buff.desc}`} tone="gold" />
+        )) : <InfoCard title="Nenhum buff ativo" muted="Escolha jogadores com estilos complementares para carimbar o plano de jogo." />}
+      </div>
+    </div>
   );
 }
 
@@ -773,14 +651,127 @@ function ClubView({
   const sponsorIncome = signedSponsors.reduce((sum, sponsor) => sum + sponsor.perMatch, 0);
 
   return (
-    <ViewShell title="Clube" action={<Button onClick={onRefreshSponsors} icon={Handshake}>Buscar propostas</Button>}>
-      <div className="grid gap-4 xl:grid-cols-[0.9fr_1.1fr]">
-        {section === "Identidade" && (
-        <section className="grid gap-4">
-          <div className="rounded-lg border border-[#303632] bg-[#1b201d] p-4">
-            <div className="mb-4 flex items-center gap-4">
+    <ViewShell title="Sala da diretoria" eyebrow="documentos do clube" action={<Button onClick={onRefreshSponsors} icon={Handshake}>Buscar propostas</Button>}>
+      {section === "Identidade" && (
+        <div className="identity-layout">
+          <section className="crest-card">
+            <div
+              className="crest-card__badge"
+              style={{
+                backgroundColor: state.club.primaryColor,
+                borderColor: state.club.secondaryColor,
+                color: state.club.secondaryColor,
+              }}
+            >
+              {state.club.crestSymbol.slice(0, 2).toUpperCase()}
+            </div>
+            <span className="kicker">Ficha institucional</span>
+            <h3>{team.name}</h3>
+            <p>{state.club.motto}</p>
+          </section>
+          <section className="paper-card form-card">
+            <div className="grid gap-3 md:grid-cols-2">
+              <PaperInput label="Simbolo" value={state.club.crestSymbol} maxLength={2} onChange={(value) => onUpdate((draft) => {
+                draft.club.crestSymbol = value || "A";
+              })} />
+              <PaperInput label="Lema" value={state.club.motto} maxLength={48} onChange={(value) => onUpdate((draft) => {
+                draft.club.motto = value;
+              })} />
+              <ColorField label="Cor principal" value={state.club.primaryColor} onChange={(value) => onUpdate((draft) => {
+                draft.club.primaryColor = value;
+              })} />
+              <ColorField label="Cor secundaria" value={state.club.secondaryColor} onChange={(value) => onUpdate((draft) => {
+                draft.club.secondaryColor = value;
+              })} />
+            </div>
+          </section>
+          <div className="mosaic-grid compact identity-metrics">
+            <Metric label="Torcida" value={`${state.fans}/100`} />
+            <Metric label="Valor do clube" value={clubValueScore(state).toString()} />
+            <Metric label="Receita casa" value={money(stadiumRevenue(state))} />
+          </div>
+        </div>
+      )}
+
+      {section === "Estadio" && (
+        <section className="blueprint-card">
+          <div className="blueprint-card__header">
+            <div>
+              <span className="kicker">Projeto de reforma</span>
+              <input value={state.stadium.name} maxLength={32} onChange={(event) => onUpdate((draft) => {
+                draft.stadium.name = event.target.value;
+              })} />
+            </div>
+            <StampBadge>Nivel {state.stadium.level}</StampBadge>
+          </div>
+          <div className="stadium-sketch" aria-hidden="true">
+            <span />
+            <span />
+            <span />
+          </div>
+          <div className="mosaic-grid compact">
+            <Metric label="Capacidade" value={state.stadium.capacity.toLocaleString("pt-BR")} />
+            <Metric label="Atmosfera" value={`${state.stadium.atmosphere}/100`} />
+            <Metric label="Instalacoes" value={`${state.stadium.facilities}/100`} />
+          </div>
+          <div className="button-row">
+            <Button onClick={() => onUpgradeStadium("capacity")} icon={Building2}>Expandir {money(2.8)}</Button>
+            <Button onClick={() => onUpgradeStadium("atmosphere")} icon={Ticket}>Arquibancada {money(1.4)}</Button>
+            <Button onClick={() => onUpgradeStadium("facilities")} icon={Dumbbell}>Instalacoes {money(1.8)}</Button>
+          </div>
+          <label className="range-ticket">
+            <span>Ingresso: {money(state.stadium.ticketPrice / 10)}</span>
+            <input type="range" min={12} max={60} value={state.stadium.ticketPrice} onChange={(event) => onUpdate((draft) => {
+              draft.stadium.ticketPrice = Number(event.target.value);
+            })} />
+          </label>
+        </section>
+      )}
+
+      {section === "Patrocinios" && (
+        <section>
+          <div className="section-line">
+            <SectionTitle icon={Handshake} title="Contratos na mesa" />
+            <span>Fixo/jogo: {money(sponsorIncome)}</span>
+          </div>
+          <div className="sponsor-grid">
+            {state.sponsors.map((sponsor) => (
+              <article key={sponsor.id} className="sponsor-envelope">
+                <div>
+                  <span className="kicker">{sponsor.tier}</span>
+                  <h3>{sponsor.name}</h3>
+                  <p>Exige torcida {sponsor.fanExpectation}/100</p>
+                </div>
+                <StampBadge tone={sponsor.signed ? "gold" : "ink"}>{sponsor.signed ? "Ativo" : "Oferta"}</StampBadge>
+                <div className="grid grid-cols-3 gap-2">
+                  <Attr label="Entrada" value={sponsor.upfront} />
+                  <Attr label="Jogo" value={sponsor.perMatch} />
+                  <Attr label="Vitoria" value={sponsor.winBonus} />
+                </div>
+                <Button onClick={() => onSignSponsor(sponsor.id)} disabled={sponsor.signed || state.fans < sponsor.fanExpectation} icon={Handshake}>
+                  {sponsor.signed ? "Contrato ativo" : "Assinar"}
+                </Button>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
+    </ViewShell>
+  );
+}
+
+function HistoryView({ section, state }: { section: string; state: GameState }) {
+  const team = userTeam(state);
+  const reputation = Object.entries(state.history.reputation).sort((a, b) => b[1] - a[1]);
+
+  return (
+    <ViewShell title="Arquivo historico" eyebrow="memoria viva" action={<StampBadge>Fundado em {state.history.foundedYear}</StampBadge>}>
+      {section === "Memoria" && (
+        <div className="archive-layout">
+          <section className="paper-card dossier">
+            <div className="dossier__head">
               <div
-                className="grid h-24 w-24 shrink-0 place-items-center rounded-lg border-2 text-5xl font-black"
+                className="mini-crest"
                 style={{
                   backgroundColor: state.club.primaryColor,
                   borderColor: state.club.secondaryColor,
@@ -790,219 +781,110 @@ function ClubView({
                 {state.club.crestSymbol.slice(0, 2).toUpperCase()}
               </div>
               <div>
-                <p className="text-xs font-extrabold uppercase text-[#d4af37]">Identidade</p>
-                <h3 className="text-3xl font-black">{team.name}</h3>
-                <p className="mt-1 text-[#aeb7b0]">{state.club.motto}</p>
+                <span className="kicker">Memoria do clube</span>
+                <h3>{team.name}</h3>
+                <p>{state.club.motto}</p>
               </div>
             </div>
-
-            <div className="grid gap-3 md:grid-cols-2">
-              <label className="grid gap-2 text-xs font-bold uppercase text-[#aeb7b0]">
-                Símbolo
-                <input
-                  value={state.club.crestSymbol}
-                  maxLength={2}
-                  onChange={(event) => onUpdate((draft) => {
-                    draft.club.crestSymbol = event.target.value || "A";
-                  })}
-                  className="h-10 rounded-md border border-[#343b37] bg-[#101312] px-3 text-[#f4f1ea]"
-                />
-              </label>
-              <label className="grid gap-2 text-xs font-bold uppercase text-[#aeb7b0]">
-                Lema
-                <input
-                  value={state.club.motto}
-                  maxLength={48}
-                  onChange={(event) => onUpdate((draft) => {
-                    draft.club.motto = event.target.value;
-                  })}
-                  className="h-10 rounded-md border border-[#343b37] bg-[#101312] px-3 text-[#f4f1ea]"
-                />
-              </label>
-              <ColorField label="Cor principal" value={state.club.primaryColor} onChange={(value) => onUpdate((draft) => {
-                draft.club.primaryColor = value;
-              })} />
-              <ColorField label="Cor secundária" value={state.club.secondaryColor} onChange={(value) => onUpdate((draft) => {
-                draft.club.secondaryColor = value;
-              })} />
+            <div className="mosaic-grid compact">
+              <InfoCard title="Rivalidade local" muted={state.history.rivalName} />
+              <InfoCard title="Torcida organizada" muted={state.history.supporterGroup} />
+              <InfoCard title="Maior vitoria" muted={state.history.records.biggestWin} />
+              <InfoCard title="Sequencia invicta" muted={`${state.history.records.unbeatenRun} jogos`} />
+              <InfoCard title="Artilheiro historico" muted={`${state.history.records.topScorerName} (${state.history.records.topScorerGoals} gols)`} />
+              <InfoCard title="Cara da base" muted={`${state.history.records.academyFaceName} (${state.history.records.academyFaceLegacy} legado)`} />
             </div>
-          </div>
+          </section>
 
-          <div className="grid gap-3 md:grid-cols-3">
-            <Metric label="Torcida" value={`${state.fans}/100`} />
-            <Metric label="Valor do clube" value={clubValueScore(state).toString()} />
-            <Metric label="Receita casa" value={money(stadiumRevenue(state))} />
-          </div>
-        </section>
-        )}
-
-        {section !== "Identidade" && (
-        <section className="grid gap-4">
-          {section === "Estádio" && (
-          <div className="rounded-lg border border-[#303632] bg-[#1b201d] p-4">
-            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-xs font-extrabold uppercase text-[#d4af37]">Estádio</p>
-                <input
-                  value={state.stadium.name}
-                  maxLength={32}
-                  onChange={(event) => onUpdate((draft) => {
-                    draft.stadium.name = event.target.value;
-                  })}
-                  className="mt-1 h-10 w-full rounded-md border border-[#343b37] bg-[#101312] px-3 text-xl font-black text-[#f4f1ea] sm:w-72"
-                />
-              </div>
-              <span className="rounded-full bg-[#252a26] px-3 py-1 text-sm font-bold text-[#d9eee0]">Nível {state.stadium.level}</span>
-            </div>
-
-            <div className="grid gap-3 md:grid-cols-3">
-              <Metric label="Capacidade" value={state.stadium.capacity.toLocaleString("pt-BR")} />
-              <Metric label="Atmosfera" value={`${state.stadium.atmosphere}/100`} />
-              <Metric label="Instalações" value={`${state.stadium.facilities}/100`} />
-            </div>
-
-            <div className="mt-4 grid gap-3 md:grid-cols-3">
-              <Button onClick={() => onUpgradeStadium("capacity")} icon={Building2}>Expandir {money(2.8)}</Button>
-              <Button onClick={() => onUpgradeStadium("atmosphere")} icon={Ticket}>Arquibancada {money(1.4)}</Button>
-              <Button onClick={() => onUpgradeStadium("facilities")} icon={Dumbbell}>Instalações {money(1.8)}</Button>
-            </div>
-
-            <label className="mt-4 grid gap-2 text-xs font-bold uppercase text-[#aeb7b0]">
-              Preço do ingresso: €{state.stadium.ticketPrice}
-              <input
-                type="range"
-                min={12}
-                max={60}
-                value={state.stadium.ticketPrice}
-                onChange={(event) => onUpdate((draft) => {
-                  draft.stadium.ticketPrice = Number(event.target.value);
-                })}
-                className="accent-[#d4af37]"
-              />
-            </label>
-          </div>
-          )}
-
-          {section === "Patrocínios" && (
-          <div>
-            <div className="mb-3 flex items-center justify-between gap-3">
-              <h3 className="text-lg font-extrabold">Patrocinadores</h3>
-              <span className="text-sm text-[#aeb7b0]">Fixo/jogo: {money(sponsorIncome)}</span>
-            </div>
-            <div className="grid gap-3 md:grid-cols-2">
-              {state.sponsors.map((sponsor) => (
-                <article key={sponsor.id} className="grid gap-3 rounded-lg border border-[#303632] bg-[#1b201d] p-3">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <strong className="block">{sponsor.name}</strong>
-                      <span className="text-sm text-[#aeb7b0]">{sponsor.tier} • exige torcida {sponsor.fanExpectation}/100</span>
-                    </div>
-                    <span className={`rounded-full px-2 py-1 text-xs font-black ${sponsor.signed ? "bg-[#d4af37] text-[#0b0f0e]" : "bg-[#252a26] text-[#d9eee0]"}`}>
-                      {sponsor.signed ? "Ativo" : "Oferta"}
-                    </span>
+          <section className="paper-card">
+            <SectionTitle icon={Trophy} title="Conquistas e idolos" />
+            <div className="grid gap-3">
+              {state.history.trophies.length ? state.history.trophies.map((trophy) => (
+                <InfoCard key={trophy} title={trophy} muted="Titulo oficial do projeto" tone="gold" />
+              )) : <InfoCard muted="Nenhuma conquista ainda. A sala de trofeus espera seu primeiro capitulo." />}
+              {state.history.legends.length ? state.history.legends.map((legend) => (
+                <article key={legend.playerId} className="legend-strip">
+                  <div>
+                    <strong>{legend.name}</strong>
+                    <span>{legend.reason}</span>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 text-sm">
-                    <Attr label="Entrada" value={sponsor.upfront} />
-                    <Attr label="Jogo" value={sponsor.perMatch} />
-                    <Attr label="Vitória" value={sponsor.winBonus} />
-                  </div>
-                  <Button onClick={() => onSignSponsor(sponsor.id)} disabled={sponsor.signed || state.fans < sponsor.fanExpectation} icon={Handshake}>
-                    {sponsor.signed ? "Contrato ativo" : "Assinar"}
-                  </Button>
+                  <StampBadge tone="gold"><Star size={13} /> {legend.legacy}</StampBadge>
                 </article>
+              )) : <InfoCard muted="Idolos ainda serao construidos por jogos, gols e momentos de base." />}
+            </div>
+          </section>
+
+          <section className="paper-card">
+            <SectionTitle icon={Flame} title="Reputacao por estilo" />
+            <div className="style-bars">
+              {reputation.map(([key, value]) => (
+                <div key={key}>
+                  <div>
+                    <span>{strategies[key as StrategyKey].name}</span>
+                    <strong>{value}/100</strong>
+                  </div>
+                  <span><i style={{ width: `${value}%` }} /></span>
+                </div>
               ))}
             </div>
-          </div>
-          )}
-        </section>
-        )}
-      </div>
+          </section>
+        </div>
+      )}
+
+      {section === "Jornal" && (
+        <div className="newspaper-grid">
+          {state.history.news.map((item) => (
+            <article key={item.id} className={cx("news-card", `tone-${item.tone}`)}>
+              <div>
+                <StampBadge tone={item.tone === "positive" ? "gold" : item.tone === "negative" ? "red" : "ink"}>{item.source}</StampBadge>
+                <span>Semana {item.week}</span>
+              </div>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))}
+        </div>
+      )}
+
+      {section === "Rede social" && (
+        <div className="supporter-wall">
+          {state.history.socials.map((post) => (
+            <article key={post.id} className={cx("supporter-note", post.sentiment === "down" && "is-critical")}>
+              <div>
+                <strong>{post.author}</strong>
+                <StampBadge tone={post.sentiment === "up" ? "gold" : post.sentiment === "down" ? "red" : "ink"}>
+                  {post.sentiment === "up" ? "alta" : post.sentiment === "down" ? "critica" : "neutro"}
+                </StampBadge>
+              </div>
+              <p>{post.content}</p>
+              <span>Semana {post.week}</span>
+            </article>
+          ))}
+        </div>
+      )}
     </ViewShell>
   );
 }
 
-function Dashboard({ section, state, position, nextLabel, buffs }: { section: string; state: GameState; position: number; nextLabel: string; buffs: ReturnType<typeof calculateBuffs>["active"] }) {
-  const team = userTeam(state);
-  const selected = selectedPlayers(team);
-
+function ViewShell({ title, eyebrow, action, children }: { title: string; eyebrow?: string; action?: React.ReactNode; children: React.ReactNode }) {
   return (
-    <div>
-      {section === "Resumo" && (
-      <>
-      <div className="mb-5 grid min-h-[300px] gap-5 xl:grid-cols-[0.85fr_1.15fr]">
-        <div className="flex flex-col justify-center gap-3">
-          <p className="text-xs font-extrabold uppercase text-[#d4af37]">Temporada {state.year}</p>
-          <h2 className="max-w-3xl text-5xl font-black leading-none md:text-7xl">{team.name}: identidade antes de reputação</h2>
-          <p className="max-w-2xl text-lg leading-8 text-[#aeb7b0]">Monte um XI por estilos, ative buffs coletivos e veja se a tática sobrevive a uma temporada inteira.</p>
+    <div className="view-shell">
+      <div className="view-shell__head">
+        <div>
+          {eyebrow ? <span className="kicker red">{eyebrow}</span> : null}
+          <h2>{title}</h2>
         </div>
-        <MiniPitch state={state} />
-      </div>
-
-      <div className="mb-5 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-        <Metric label="Posição" value={`${position}º`} />
-        <Metric label="Próximo jogo" value={nextLabel} />
-        <Metric label="Força XI" value={Math.round(teamPower(team, state)).toString()} />
-        <Metric label="Orçamento" value={money(state.budget)} />
-      </div>
-      </>
-      )}
-
-      {section === "Próximo jogo" && (
-        <div className="grid gap-3 md:grid-cols-3">
-          <Metric label="Próximo jogo" value={nextLabel} />
-          <Metric label="Força XI" value={Math.round(teamPower(team, state)).toString()} />
-          <Metric label="Esquema" value={formationDefs[state.formation].name} />
-        </div>
-      )}
-
-      {section !== "Próximo jogo" && (
-      <div className="grid gap-4 xl:grid-cols-2">
-        {section === "Resumo" && (
-        <section>
-          <h3 className="mb-3 text-lg font-extrabold">Buffs ativos</h3>
-          <div className="grid gap-3">
-            {buffs.length ? buffs.map((buff) => (
-              <InfoCard key={buff.key} title={`${buff.buff} +${buff.points}`} muted={`${buff.count}/${buff.threshold} jogadores com ${buff.name}. ${buff.desc}`} />
-            )) : <InfoCard title="Nenhum buff ativo" muted="Escolha jogadores com estilos complementares." />}
-          </div>
-        </section>
-        )}
-        {section === "Eventos" && (
-        <section>
-          <h3 className="mb-3 text-lg font-extrabold">Últimos eventos</h3>
-          <div className="grid gap-3">
-            {state.log.slice(0, 6).map((event) => <InfoCard key={event} muted={event} />)}
-          </div>
-        </section>
-        )}
-      </div>
-      )}
-    </div>
-  );
-}
-
-function ViewShell({ title, action, children }: { title: string; action?: React.ReactNode; children: React.ReactNode }) {
-  return (
-    <div>
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-2xl font-black text-[#f4f1ea]">{title}</h2>
-        {action}
+        {action ? <div className="view-shell__action">{action}</div> : null}
       </div>
       {children}
     </div>
   );
 }
 
-function Button({ children, onClick, disabled, primary = false, icon: Icon }: { children: React.ReactNode; onClick?: () => void; disabled?: boolean; primary?: boolean; icon?: React.ComponentType<{ size?: number }> }) {
+function Button({ children, onClick, disabled, primary = false, icon: IconComponent }: { children: React.ReactNode; onClick?: () => void; disabled?: boolean; primary?: boolean; icon?: Icon }) {
   return (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-md border px-3 text-sm font-bold ${
-        primary ? "border-[#d4af37] bg-[#d4af37] text-[#111413]" : "border-[#343b37] bg-[#1b201d] text-[#f4f1ea] hover:border-[#d4af37]"
-      }`}
-    >
-      {Icon ? <Icon size={17} /> : null}
+    <button onClick={onClick} disabled={disabled} className={cx("stamp-button", primary && "is-primary")}>
+      {IconComponent ? <IconComponent size={17} /> : null}
       {children}
     </button>
   );
@@ -1010,33 +892,64 @@ function Button({ children, onClick, disabled, primary = false, icon: Icon }: { 
 
 function Metric({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-[#303632] bg-[#1b201d] p-4 shadow-[0_12px_28px_rgba(0,0,0,0.22)]">
-      <span className="block text-xs font-bold uppercase text-[#aeb7b0]">{label}</span>
-      <strong className="mt-2 block text-xl text-[#f4f1ea]">{value}</strong>
+    <div className="metric-stamp">
+      <span>{label}</span>
+      <strong>{value}</strong>
     </div>
   );
 }
 
-function InfoCard({ title, muted }: { title?: string; muted?: string }) {
+function InfoCard({ title, muted, tone = "neutral", className }: { title?: string; muted?: string; tone?: "neutral" | "gold" | "green"; className?: string }) {
   return (
-    <div className="rounded-lg border border-[#303632] bg-[#1b201d] p-3 shadow-[0_10px_24px_rgba(0,0,0,0.18)]">
-      {title ? <strong className="block text-[#f4f1ea]">{title}</strong> : null}
-      {muted ? <span className="text-[#aeb7b0]">{muted}</span> : null}
+    <div className={cx("paper-card info-card", `tone-${tone}`, className)}>
+      {title ? <strong>{title}</strong> : null}
+      {muted ? <span>{muted}</span> : null}
     </div>
+  );
+}
+
+function StampBadge({ children, tone = "red" }: { children: React.ReactNode; tone?: "red" | "gold" | "ink" }) {
+  return <span className={cx("stamp-badge", `tone-${tone}`)}>{children}</span>;
+}
+
+function SectionTitle({ title, icon: IconComponent, className }: { title: string; icon: Icon; className?: string }) {
+  return (
+    <div className={cx("section-title", className)}>
+      <IconComponent size={18} />
+      <h3>{title}</h3>
+    </div>
+  );
+}
+
+function PaperInput({ label, value, onChange, maxLength }: { label: string; value: string; onChange: (value: string) => void; maxLength?: number }) {
+  return (
+    <label className="paper-field">
+      <span>{label}</span>
+      <input value={value} maxLength={maxLength} onChange={(event) => onChange(event.target.value)} />
+    </label>
+  );
+}
+
+function PaperSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (value: string) => void; options: Array<{ value: string; label: string }> }) {
+  return (
+    <label className="paper-field">
+      <span>{label}</span>
+      <select value={value} onChange={(event) => onChange(event.target.value)}>
+        {options.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+      </select>
+    </label>
   );
 }
 
 function ColorField({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
   return (
-    <label className="grid gap-2 text-xs font-bold uppercase text-[#aeb7b0]">
-      {label}
-      <span className="flex h-10 overflow-hidden rounded-md border border-[#343b37] bg-[#101312]">
-        <span className="grid w-11 place-items-center border-r border-[#343b37]">
-          <Palette size={16} />
-        </span>
-        <input type="color" value={value} onChange={(event) => onChange(event.target.value)} className="h-10 w-14 bg-transparent p-1" />
-        <input value={value} onChange={(event) => onChange(event.target.value)} className="min-w-0 flex-1 bg-transparent px-2 text-[#f4f1ea]" />
-      </span>
+    <label className="paper-field color-field">
+      <span>{label}</span>
+      <div>
+        <Palette size={16} />
+        <input type="color" value={value} onChange={(event) => onChange(event.target.value)} />
+        <input value={value} onChange={(event) => onChange(event.target.value)} />
+      </div>
     </label>
   );
 }
@@ -1046,56 +959,48 @@ function PlayerGrid({
   strategy,
   onNumberChange,
   action,
+  variant = "album",
 }: {
   players: Player[];
   strategy: StrategyKey;
   onNumberChange: (playerId: string, shirtNumber: number) => void;
   action: (player: Player) => React.ReactNode;
+  variant?: "album" | "classified" | "scout";
 }) {
   return (
-    <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-      {players.map((player) => (
-        <article key={player.id} className="grid gap-3 rounded-lg border border-[#303632] bg-[#1b201d] p-4 shadow-[0_14px_32px_rgba(0,0,0,0.24)]">
-          <div className="flex items-start gap-3">
-            <div className="relative grid h-16 w-16 shrink-0 place-items-center rounded-lg border border-[#d4af37]/50 bg-[#252a26] text-[#f4f1ea]">
-              <Shirt size={38} strokeWidth={1.8} />
-              <span className="absolute inset-x-0 top-6 text-center text-sm font-black text-[#d4af37]">{player.shirtNumber}</span>
+    <div className={cx("player-grid", `variant-${variant}`)}>
+      {players.map((player, index) => (
+        <article key={player.id} className="player-sticker" style={{ ["--tilt" as string]: `${(index % 5) - 2}deg` }}>
+          <div className="player-sticker__top">
+            <div className="shirt-frame">
+              <Shirt size={42} strokeWidth={1.7} />
+              <span>{player.shirtNumber}</span>
             </div>
-            <div className="min-w-0 flex-1">
-              <div className="flex items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <strong className="block truncate text-[#f4f1ea]">{player.name}</strong>
-                  <span className="text-sm text-[#aeb7b0]">{player.position} • {player.age} anos • OVR {Math.round(averageAttributes(player))} • POT {player.potential}</span>
-                </div>
-                <span className={`grid h-8 min-w-8 place-items-center rounded-full px-2 text-xs font-black ${player.selected ? "bg-[#d4af37] text-[#111413]" : "bg-[#101312] text-[#f4f1ea]"}`}>
-                  {player.selected ? "XI" : rating(player, strategy)}
-                </span>
-              </div>
-              <label className="mt-3 flex w-28 items-center gap-2 rounded-md border border-[#343b37] bg-[#101312] px-2 text-xs font-bold text-[#aeb7b0]">
-                <Hash size={13} />
-                <input
-                  type="number"
-                  min={1}
-                  max={99}
-                  value={player.shirtNumber}
-                  onChange={(event) => onNumberChange(player.id, Number(event.target.value))}
-                  className="h-8 min-w-0 flex-1 bg-transparent text-[#f4f1ea] outline-none"
-                />
-              </label>
+            <div>
+              <span className="kicker">{player.position} / {player.age} anos</span>
+              <h3>{player.name}</h3>
             </div>
+            <StampBadge tone={player.selected ? "gold" : "ink"}>{player.selected ? "XI" : rating(player, strategy)}</StampBadge>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {player.styles.map((style) => (
-              <span key={style} className="rounded-full bg-[#252a26] px-2 py-1 text-xs font-bold text-[#d8ded8]">{styleDefs[style].name}</span>
-            ))}
+          <div className="player-sticker__meta">
+            <span>OVR {Math.round(averageAttributes(player))}</span>
+            <span>POT {player.potential}</span>
+            <span>{money(player.value)}</span>
           </div>
-          <div className="grid grid-cols-4 gap-2">
+          <label className="number-ticket">
+            <Hash size={13} />
+            <input type="number" min={1} max={99} value={player.shirtNumber} onChange={(event) => onNumberChange(player.id, Number(event.target.value))} />
+          </label>
+          <div className="style-chip-row">
+            {player.styles.map((style) => <span key={style}>{styleDefs[style].name}</span>)}
+          </div>
+          <div className="attr-grid">
             <Attr label="TEC" value={player.attributes.technical} />
             <Attr label="MEN" value={player.attributes.mental} />
             <Attr label="FIS" value={player.attributes.physical} />
             <Attr label="DEF" value={player.attributes.defense} />
           </div>
-          <div className="flex flex-wrap gap-2">{action(player)}</div>
+          <div className="button-row">{action(player)}</div>
         </article>
       ))}
     </div>
@@ -1104,9 +1009,9 @@ function PlayerGrid({
 
 function Attr({ label, value }: { label: string; value: number }) {
   return (
-    <div className="grid gap-1 rounded-md bg-[#101312] p-2 text-[#f4f1ea]">
-      <small className="text-[11px] font-extrabold text-[#aeb7b0]">{label}</small>
-      {value}
+    <div className="attr-box">
+      <small>{label}</small>
+      <b>{value}</b>
     </div>
   );
 }
@@ -1116,15 +1021,17 @@ function MiniPitch({ state }: { state: GameState }) {
   const formation = formationDefs[state.formation];
 
   return (
-    <div className="relative min-h-[300px] overflow-hidden rounded-lg border-2 border-[#b9e7c7] bg-[linear-gradient(135deg,#247348,#18573d)]">
-      <div className="absolute bottom-0 left-1/2 top-0 border-l-2 border-white/70" />
-      <div className="absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/70" />
+    <div className="paper-pitch">
+      <div className="paper-pitch__line middle" />
+      <div className="paper-pitch__circle" />
+      <div className="paper-pitch__box left" />
+      <div className="paper-pitch__box right" />
       {formation.slots.map((slot) => {
         const assignment = state.lineup.find((item) => item.slotId === slot.id);
         const player = team.squad.find((item) => item.id === assignment?.playerId);
 
         return (
-          <div key={slot.id} className="absolute grid h-9 w-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-[#f3f7f0] text-xs font-black text-[#122018] shadow-lg" style={{ left: `${slot.x}%`, top: `${slot.y}%` }}>
+          <div key={slot.id} className="pitch-token" style={{ left: `${slot.x}%`, top: `${slot.y}%` }}>
             {player?.position ?? slot.label}
           </div>
         );
@@ -1154,104 +1061,134 @@ function Formation({
 
   return (
     <>
-      <div className="relative mt-4 aspect-[16/10] w-full max-w-full overflow-hidden rounded-lg border border-[#5ed184] bg-[repeating-linear-gradient(90deg,rgba(255,255,255,0.055)_0_11%,rgba(0,0,0,0.045)_11%_22%),linear-gradient(135deg,#26794e,#185b3d)] shadow-[0_20px_48px_rgba(0,0,0,0.28)]">
-        <div className="absolute bottom-0 left-1/2 top-0 border-l-2 border-white/55" />
-        <div className="absolute left-1/2 top-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white/55" />
-        <div className="absolute left-0 top-[30%] h-[40%] w-[15%] border-y-2 border-r-2 border-white/50" />
-        <div className="absolute right-0 top-[30%] h-[40%] w-[15%] border-y-2 border-l-2 border-white/50" />
-
+      <div className="tactical-board">
+        <div className="board-line middle" />
+        <div className="board-circle" />
+        <div className="board-box left" />
+        <div className="board-box right" />
         {formation.slots.map((slot) => {
           const assignment = state.lineup.find((item) => item.slotId === slot.id);
           const player = team.squad.find((item) => item.id === assignment?.playerId);
           const fit = player ? Math.round(positionBadgeFit(player.position, slot.position) * 100) : 0;
 
           return (
-            <button
-              key={slot.id}
-              onClick={() => onSelectSlot(slot.id)}
-              className="absolute grid w-[78px] -translate-x-1/2 -translate-y-1/2 justify-items-center gap-1 text-center"
-              style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
-              title={player ? player.name : slot.label}
-            >
-              <span className={`relative grid h-14 w-14 place-items-center rounded-md border shadow-lg ${player ? "border-[#f4f1ea]/80 bg-[#f4f1ea] text-[#111413]" : "border-dashed border-white/70 bg-white/10 text-white"}`}>
-                <Shirt size={38} strokeWidth={1.9} />
-                <span className={`absolute inset-x-0 top-[22px] text-center text-sm font-black ${player ? "text-[#111413]" : "text-white"}`}>
-                  {player?.shirtNumber ?? slot.label}
-                </span>
-                <span className={`absolute -right-2 -top-2 rounded-full px-1.5 py-0.5 text-[10px] font-black ${fit >= 95 ? "bg-[#d4af37] text-[#111413]" : fit >= 80 ? "bg-[#e0b64f] text-[#111413]" : "bg-[#e46f61] text-[#111413]"}`}>
-                  {player ? fit : 0}
-                </span>
+            <button key={slot.id} onClick={() => onSelectSlot(slot.id)} className="board-piece" style={{ left: `${slot.x}%`, top: `${slot.y}%` }} title={player ? player.name : slot.label}>
+              <span>
+                <Shirt size={34} strokeWidth={1.8} />
+                <b>{player?.shirtNumber ?? slot.label}</b>
+                <i>{player ? fit : 0}</i>
               </span>
-              <span className="max-w-[92px] truncate rounded bg-[#101312]/80 px-1.5 py-0.5 text-[11px] font-black text-[#f4f1ea]">
-                {player ? player.name.split(" ").slice(-1)[0] : slot.label}
-              </span>
+              <small>{player ? player.name.split(" ").slice(-1)[0] : slot.label}</small>
             </button>
           );
         })}
       </div>
 
       {selectedSlot ? (
-        <div className="fixed inset-0 z-50 grid place-items-center bg-black/70 p-4" onClick={onCloseModal}>
-          <div className="w-full max-w-xl rounded-lg border border-[#303632] bg-[#181c1a] p-5 shadow-2xl" onClick={(event) => event.stopPropagation()}>
-            <div className="mb-4 flex items-start justify-between gap-4">
+        <div className="modal-scrim" onClick={onCloseModal}>
+          <div className="modal-dossier" onClick={(event) => event.stopPropagation()}>
+            <div className="modal-dossier__head">
               <div>
-                <p className="text-xs font-extrabold uppercase text-[#d4af37]">Posição {selectedSlot.label}</p>
-                <h3 className="text-2xl font-black text-[#f4f1ea]">{selectedPlayer?.name ?? "Sem jogador escalado"}</h3>
-                <p className="text-[#aeb7b0]">Encaixe: {selectedPlayer ? Math.round(positionBadgeFit(selectedPlayer.position, selectedSlot.position) * 100) : 0}%</p>
+                <span className="kicker red">Posicao {selectedSlot.label}</span>
+                <h3>{selectedPlayer?.name ?? "Sem jogador escalado"}</h3>
+                <p>Encaixe: {selectedPlayer ? Math.round(positionBadgeFit(selectedPlayer.position, selectedSlot.position) * 100) : 0}%</p>
               </div>
-              <button onClick={onCloseModal} className="rounded-md border border-[#343b37] px-3 py-1 text-sm font-bold text-[#f4f1ea]">Fechar</button>
+              <Button onClick={onCloseModal}>Fechar</Button>
             </div>
 
-            <label className="mb-4 grid gap-2 text-xs font-bold uppercase text-[#aeb7b0]">
-              Trocar jogador
-              <select
-                value={selectedPlayer?.id ?? ""}
-                onChange={(event) => onAssign(selectedSlot.id, event.target.value || null)}
-                className="h-11 rounded-md border border-[#343b37] bg-[#101312] px-3 text-[#f4f1ea]"
-              >
-                <option value="">Sem jogador</option>
-                {team.squad.map((candidate) => (
-                  <option key={candidate.id} value={candidate.id}>
-                    {candidate.position} #{candidate.shirtNumber} {candidate.name}
-                  </option>
-                ))}
-              </select>
-            </label>
+            <PaperSelect
+              label="Trocar jogador"
+              value={selectedPlayer?.id ?? ""}
+              onChange={(value) => onAssign(selectedSlot.id, value || null)}
+              options={[{ value: "", label: "Sem jogador" }, ...team.squad.map((candidate) => ({ value: candidate.id, label: `${candidate.position} #${candidate.shirtNumber} ${candidate.name}` }))]}
+            />
 
             {selectedPlayer ? (
-              <div className="grid gap-4 md:grid-cols-[120px_1fr]">
-                <div className="relative grid h-28 w-28 place-items-center rounded-lg border border-[#d4af37]/60 bg-[#252a26] text-[#f4f1ea]">
-                  <Shirt size={72} strokeWidth={1.8} />
-                  <span className="absolute inset-x-0 top-[45px] text-center text-2xl font-black text-[#d4af37]">{selectedPlayer.shirtNumber}</span>
+              <div className="modal-player">
+                <div className="shirt-frame large">
+                  <Shirt size={72} strokeWidth={1.7} />
+                  <span>{selectedPlayer.shirtNumber}</span>
                 </div>
                 <div className="grid gap-3">
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <InfoCard title="Posição natural" muted={selectedPlayer.position} />
+                  <div className="mosaic-grid compact">
+                    <InfoCard title="Posicao natural" muted={selectedPlayer.position} />
                     <InfoCard title="Valor" muted={money(selectedPlayer.value)} />
                     <InfoCard title="Idade" muted={`${selectedPlayer.age} anos`} />
                     <InfoCard title="Potencial" muted={selectedPlayer.potential.toString()} />
                   </div>
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="attr-grid">
                     <Attr label="TEC" value={selectedPlayer.attributes.technical} />
                     <Attr label="MEN" value={selectedPlayer.attributes.mental} />
                     <Attr label="FIS" value={selectedPlayer.attributes.physical} />
                     <Attr label="DEF" value={selectedPlayer.attributes.defense} />
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedPlayer.styles.map((style) => (
-                      <span key={style} className="rounded-full bg-[#252a26] px-2 py-1 text-xs font-bold text-[#d8ded8]">{styleDefs[style].name}</span>
-                    ))}
+                  <div className="style-chip-row">
+                    {selectedPlayer.styles.map((style) => <span key={style}>{styleDefs[style].name}</span>)}
                   </div>
-                  <Button onClick={() => onAssign(selectedSlot.id, null)}>Remover da posição</Button>
+                  <Button onClick={() => onAssign(selectedSlot.id, null)}>Remover da posicao</Button>
                 </div>
               </div>
             ) : (
-              <InfoCard title="Posição vazia" muted="Escolha um jogador para ocupar este espaço no esquema." />
+              <InfoCard title="Posicao vazia" muted="Escolha um jogador para ocupar este espaco no esquema." />
             )}
           </div>
         </div>
       ) : null}
     </>
+  );
+}
+
+function FixturePoster({ team, nextLabel, formation, power }: { team: string; nextLabel: string; formation: string; power: number }) {
+  return (
+    <article className="fixture-poster">
+      <span className="kicker">Proximo jogo</span>
+      <h3>{nextLabel}</h3>
+      <div>
+        <Metric label="Clube" value={team} />
+        <Metric label="Esquema" value={formation} />
+        <Metric label="Forca XI" value={power.toString()} />
+      </div>
+    </article>
+  );
+}
+
+function FixtureStrip({ week, label, result, played }: { week: number; label: string; result: string; played: boolean }) {
+  return (
+    <article className={cx("fixture-strip", played && "is-played")}>
+      <span>Semana {week}</span>
+      <strong>{label}</strong>
+      <b>{result}</b>
+    </article>
+  );
+}
+
+function PaperTable({ rows }: { rows: ReturnType<typeof sortedTable> }) {
+  return (
+    <div className="paper-table-wrap">
+      <table className="paper-table">
+        <thead>
+          <tr>
+            {["#", "Clube", "J", "V", "E", "D", "GP", "GC", "SG", "Pts"].map((head) => <th key={head}>{head}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, index) => (
+            <tr key={row.id} className={row.isUser ? "is-user" : undefined}>
+              <td>{index + 1}</td>
+              <td>{row.name}</td>
+              <td>{row.stats.played}</td>
+              <td>{row.stats.won}</td>
+              <td>{row.stats.drawn}</td>
+              <td>{row.stats.lost}</td>
+              <td>{row.stats.gf}</td>
+              <td>{row.stats.ga}</td>
+              <td>{row.stats.gf - row.stats.ga}</td>
+              <td>{row.stats.points}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
