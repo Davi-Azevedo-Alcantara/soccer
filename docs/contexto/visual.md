@@ -1,428 +1,342 @@
-# Direcao visual do Soccer Architect MVP
+Você é um diretor de arte sênior, product designer e frontend developer. Refaça o visual da aplicação do zero. Não faça apenas ajustes de cor, borda ou background. A interface atual está parecendo dashboard comum com tema bege. Isso está errado.
 
-Voce e um diretor de arte senior, product designer e frontend developer trabalhando no `Soccer Architect MVP`, um prototipo em Next.js, React, TypeScript e Tailwind CSS para simulacao e gestao de um clube ficticio.
+O objetivo é transformar a aplicação em um produto visualmente autoral, ousado, vintage, divertido e memorável.
 
-O produto atual tem um menu lateral, secoes internas, cards escuros e uma linguagem visual muito proxima de dashboard SaaS. A adaptacao visual deve transformar essa interface em um produto autoral, esportivo, editorial e memoravel, sem trocar o foco do jogo.
+Direção obrigatória:
+A aplicação deve parecer um “almanaque esportivo interativo”, misturando:
 
-## Objetivo
-
-Refatorar a UI existente para parecer um almanaque esportivo interativo: uma mistura de jornal de futebol, album de figurinhas, prancheta de treinador, boletim de campeonato, classificados esportivos e arquivo historico do clube.
-
-A aplicacao deve continuar sendo jogavel e clara. O usuario precisa conseguir:
-
-- renomear o clube;
-- escolher estrategia e formacao;
-- montar o XI inicial;
-- simular partidas;
-- acompanhar tabela, calendario, noticias e rede social;
-- gerenciar elenco, mercado, base, estadio, patrocinadores e identidade do clube.
-
-Nao implemente backend. Nao use dados reais. Nao use clubes, atletas, marcas, federacoes ou escudos reais. Preserve os dados mockados e a simulacao existente.
-
-## Principio central
-
-Se qualquer tela ainda parecer um painel administrativo comum com cards padronizados, a direcao visual falhou.
-
-A mudanca precisa ser estrutural:
-
-- layout;
-- hierarquia;
-- formas;
-- tipografia;
-- espacamento;
-- componentes;
-- microinteracoes;
-- linguagem visual;
-- composicao responsiva.
-
-Nao basta mudar cor, borda, sombra ou background.
-
-## Imaginario visual
-
-A aplicacao deve combinar:
-
-- capa de jornal esportivo antigo;
-- almanaque anual de futebol;
-- album de figurinhas;
+- jornal esportivo antigo;
+- álbum de figurinhas;
+- capa de revista de futebol;
 - mesa de treinador com prancheta;
 - boletim de campeonato;
-- cartazes de estadio;
-- classificados de jornal;
-- fichario do clube;
-- radio esportivo;
-- placar retro;
-- arquivo historico de uma agremiacao ficticia.
+- cartaz de estádio;
+- rádio esportivo;
+- placar retrô.
 
-Evite:
+Não quero:
 
 - dashboard SaaS;
-- sidebar corporativa comum;
-- cards identicos em grade;
-- glassmorphism;
-- visual financeiro com tema de futebol;
+- cards genéricos;
 - layout limpo demais;
-- bege usado como fundo vazio;
-- decoracao vintage superficial;
-- excesso de retangulos arredondados iguais.
+- sidebar comum + cards comuns;
+- apenas fundo bege;
+- apenas contorno vintage;
+- apenas trocar cor;
+- glassmorphism;
+- visual corporativo;
+- app financeiro com tema de futebol.
 
-## Produto atual e escopo real
+Regra principal:
+Se a tela ainda parecer um painel administrativo comum, está errado. Refaça.
 
-As telas existentes sao:
+Mude a estrutura visual das telas.
 
-- `dashboard`: resumo, eventos e proximo jogo;
-- `club`: identidade, estadio e patrocinadores;
-- `history`: memoria, jornal e rede social;
-- `squad`: elenco, numeracao e contratos;
-- `tactics`: formacao, perfil e sinergias;
-- `calendar`: jogos e resultados;
-- `table`: classificacao e criterios;
-- `transfers`: mercado e alvos;
-- `academy`: promessas e desenvolvimento.
+A página inicial/dashboard não deve ser uma grade comum de cards.
+Ela deve parecer a capa de um jornal esportivo.
 
-Nao crie telas novas obrigatorias como loja, admin, ligas multiplas ou partida ao vivo separada. Se surgir algum bloco inspirado nelas, ele deve servir ao MVP atual.
+Estrutura do dashboard:
 
-## Shell da aplicacao
+- Manchete gigante no topo.
+- Submanchetes menores em duas colunas.
+- Foto/avatar/escudo em destaque como recorte de jornal.
+- Tabela da liga como bloco impresso.
+- Próxima partida como pôster de confronto.
+- Últimos resultados como tiras de jornal.
+- Alertas como bilhetes colados.
+- Finanças/fãs/reputação como selos ou carimbos.
+- Um bloco chamado “Rádio do Clube” com resumo narrativo.
 
-O shell atual de header + menu lateral + menu contextual deve ser redesenhado como um objeto editorial.
+Exemplo de linguagem visual:
+“CLUBE AURORA VENCE NO SUFOCO”
+“Promessa da base ganha moral no vestiário”
+“Diretoria anuncia reforma no estádio”
+“Torcida cobra reação antes do clássico”
 
-Direcao:
-
-- o topo deve parecer a faixa de cabecalho de um jornal esportivo;
-- o nome `Soccer Architect` pode aparecer como nome do caderno ou gazeta;
-- o campo de nome do clube deve parecer uma etiqueta editavel, uma ficha de inscricao ou um carimbo preenchido;
-- o botao `Nova carreira` deve parecer um carimbo, alavanca de impressora ou botao de maquina;
-- a navegacao principal deve parecer indice de almanaque, abas de fichario ou recortes colados;
-- o menu contextual deve parecer abas de paginas, etiquetas de arquivo ou marcadores impressos.
-
-Mesmo que a navegacao continue no lado esquerdo em desktop, ela nao deve parecer sidebar SaaS. Em mobile, pode virar faixa horizontal de recortes ou abas.
-
-## Linguagem tipografica
-
-Use pelo menos 3 estilos tipograficos:
-
-1. Manchetes: serifada forte, slab ou display vintage.
-2. Placar e numeros: condensada esportiva.
-3. Texto comum: sans-serif moderna e legivel.
-
-Sugestoes:
-
-- manchetes: `Roboto Slab`, `Bitter`, `Playfair Display`, `Archivo Black` ou similar;
-- placar/numeros: `Oswald`, `Bebas Neue` ou similar;
-- texto comum: `Inter`, `Manrope` ou similar.
-
-Regras:
-
-- titulos de capa devem ser grandes e dramaticos;
-- numeros de classificacao, overall, orcamento, placar e atributos devem ter peso visual;
-- textos de suporte precisam continuar legiveis;
-- nao use texto gigante dentro de paineis compactos;
-- nao deixe labels quebrarem ou estourarem no mobile.
-
-## Paleta
-
-Use paleta vintage forte, com contraste real.
-
-Base:
-
-- Papel envelhecido: `#F1E2B8`
-- Papel claro: `#FFF3CF`
-- Papel escuro: `#D2B77A`
-- Tinta preta: `#181713`
-- Vermelho manchete: `#B32018`
-- Verde campo: `#246B3A`
-- Verde profundo: `#153D25`
-- Azul marinho antigo: `#162B45`
-- Amarelo trofeu: `#D79A21`
-- Marrom couro: `#6B3F24`
-- Cinza jornal: `#5E5A4E`
-
-Use o bege como papel, nao como vazio. Use vermelho para manchetes, alertas e carimbos. Use preto/carvao para contraste. Use verde nos elementos de campo, tatico e identidade esportiva. Evite um tema monotematico dominado por uma unica familia de cor.
-
-## Texturas e formas
+Crie componentes com formatos diferentes.
+Não use apenas retângulos iguais.
 
 Use:
 
-- sombras de papel;
-- textura discreta de impressao;
-- linhas de jornal;
-- halftone leve;
-- bordas levemente irregulares;
-- divisorias grossas;
+- cards inclinados levemente;
 - recortes sobrepostos;
-- fitas adesivas;
-- etiquetas;
 - selos circulares;
 - carimbos diagonais;
+- fitas;
+- etiquetas;
+- pôsteres;
+- bilhetes;
+- fichas de jogador;
+- cartões de campeonato;
+- envelopes de proposta;
+- pranchetas;
 - tiras de manchete;
-- posters;
-- fichas;
-- envelopes;
-- pranchetas.
+- placas de estádio.
 
-Nao use apenas cards arredondados iguais. Componentes podem ter pequenas rotacoes, alturas diferentes e sobreposicoes leves, desde que a leitura e a responsividade continuem boas.
+Layout visual:
+A interface deve ter sensação de colagem editorial.
+Alguns elementos podem se sobrepor levemente.
+Alguns cards podem ter rotação sutil.
+Use sombras de papel.
+Use bordas irregulares discretas.
+Use textura de impressão.
+Use halftone leve.
+Use linhas de jornal.
+Use divisórias grossas.
+Use contraste forte.
 
-## Dashboard: capa do jornal do clube
+Tipografia obrigatória:
+Use pelo menos 3 estilos tipográficos:
 
-O dashboard deve parecer a capa de um jornal esportivo da semana do clube.
+1. Manchetes: serifada forte ou display vintage.
+2. Placar/números: condensada esportiva.
+3. Texto comum: sans-serif moderna legível.
 
-Resumo:
+Sugestões:
 
-- manchete principal com o nome do clube e a situacao da temporada;
-- submanchete sobre estilo tatico, XI e identidade;
-- mini campo como foto/diagrama de capa, nao como card generico;
-- posicao, proximo jogo, forca do XI e orcamento como selos, carimbos ou chamadas laterais;
-- buffs ativos como notas de redacao ou carimbos de estilo;
-- eventos recentes como tiras de jornal;
-- proximo jogo como poster de confronto.
+- Manchetes: Archivo Black, Roboto Slab, Bitter, Playfair Display ou similar.
+- Placar: Oswald, Bebas Neue ou similar.
+- Texto comum: Inter, Manrope ou similar.
 
-Linguagem de exemplo:
+A hierarquia deve ser dramática.
+Títulos devem ser grandes.
+Placar deve ser grande.
+Manchetes devem dominar a página.
+Não tenha medo de usar texto grande.
 
-- `AURORA FC BUSCA IDENTIDADE ANTES DO PLACAR`
-- `Pressao alta ganha moral no vestiario`
-- `Diretoria calcula receita antes da rodada`
-- `XI titular tenta provar encaixe no gramado`
+Paleta:
+Use paleta vintage forte, não pastel fraca.
 
-Evite grade comum de metric cards.
+Cores:
 
-## Clube: ficha institucional e sala da diretoria
+- Papel envelhecido: #F1E2B8
+- Papel claro: #FFF3CF
+- Papel escuro: #D2B77A
+- Tinta preta: #181713
+- Vermelho manchete: #B32018
+- Verde campo: #246B3A
+- Verde profundo: #153D25
+- Azul marinho antigo: #162B45
+- Amarelo troféu: #D79A21
+- Marrom couro: #6B3F24
+- Cinza jornal: #5E5A4E
 
-A tela `Clube` deve parecer um pacote fisico de documentos do clube.
+Use vermelho com força para manchetes, alertas e carimbos.
+Use preto/carvão para contraste real.
+Use bege como papel, não como “fundo vazio”.
 
-Identidade:
+Telas principais e como devem parecer:
 
-- escudo textual como brasao impresso;
-- cores como amostras de tecido/tinta;
-- lema como frase em faixa ou flamula;
-- campos de edicao com cara de ficha preenchida.
+1. Dashboard
+   Deve parecer CAPA DE JORNAL.
+   Nada de dashboard comum.
+   Elementos:
 
-Estadio:
+- manchete principal;
+- pôster do próximo jogo;
+- tabela impressa;
+- notas da diretoria;
+- rádio do clube;
+- últimos resultados como tiras;
+- cards de recursos como selos.
 
-- deve parecer projeto de reforma e folheto de arquibancada;
-- capacidade, atmosfera e instalacoes como medidores impressos;
-- preco do ingresso como etiqueta de bilheteria;
-- acoes de melhoria como placas de obra ou carimbos de aprovacao.
+2. Ligas
+   Deve parecer MURAL DE CARTAZES DE CAMPEONATO.
+   Cada liga deve ser um cartaz/folheto, não um card comum.
+   Cada cartaz mostra:
 
-Patrocinios:
+- nome da liga;
+- pública/privada;
+- divisões;
+- vagas humanas;
+- vagas IA;
+- temporada infinita/temporária/objetivo;
+- botão “Inscrever Clube”.
 
-- propostas como contratos, envelopes ou anuncios de jornal;
-- patrocinador assinado como selo `Ativo`;
-- requisitos de torcida como clausulas destacadas.
+3. Criar Liga
+   Deve parecer FICHA DE INSCRIÇÃO DE CAMPEONATO.
+   Use campos como formulário impresso.
+   Use checkboxes customizados.
+   Use preview lateral como cartaz da liga.
+   Use carimbos: “Pública”, “Privada”, “IA Permitida”, “Entrada Flexível”.
 
-## Historia: arquivo do clube, jornal e rede social
+4. Detalhe da Liga
+   Deve parecer ALMANAQUE DA COMPETIÇÃO.
+   Abas como páginas:
 
-A tela `Historia` e o lugar da memoria do clube.
+- Classificação;
+- Rodadas;
+- Artilharia;
+- Copas;
+- Clubes;
+- Arquivo Histórico.
+  Tabela com cara de jornal impresso.
 
-Memoria:
-
-- deve parecer arquivo historico, vitrine de trofeus e fichas de idolos;
-- rivalidade, torcida, recordes e reputacao por estilo devem virar dossies impressos;
-- trofeus podem aparecer como etiquetas ou placas em uma parede de arquivo.
-
-Jornal:
-
-- noticias devem parecer recortes de jornal;
-- cada noticia deve ter fonte, semana, titulo forte e corpo curto;
-- tons positivos, neutros e negativos podem variar selo, borda e cor de manchete.
-
-Rede social:
-
-- nao deve parecer feed corporativo;
-- trate posts como bilhetes de torcida, recados de radio ou telegramas de arquibancada;
-- sentimento pode aparecer como seta, carimbo ou etiqueta.
-
-## Elenco: album de figurinhas e fichario
-
-Jogadores nao devem parecer linhas de tabela nem cards SaaS.
-
-Cada jogador deve parecer figurinha:
-
-- silhueta/camisa;
-- numero grande;
-- nome;
-- posicao;
-- idade;
-- overall/rating em destaque;
-- potencial;
-- valor;
-- estilos como selos de habilidade;
-- atributos em faixa ou quadrinhos de album;
-- status `XI` como carimbo.
-
-Interacao:
-
-- hover levanta a figurinha com sombra de papel;
-- botao de escalar/remover deve parecer etiqueta acionavel;
-- vender deve parecer carimbo de transferencia;
-- o controle de numero da camisa deve parecer campo de ficha.
-
-A secao `Contratos` pode ser um resumo contabil de fichario, mas ainda com cara de clube, nao de financeiro SaaS.
-
-## Tatica: prancheta do treinador
-
-A tela `Tatica` deve parecer uma prancheta sobre a mesa.
+5. Partida ao Vivo
+   Deve ser a tela mais ousada.
+   Não pode parecer dashboard.
+   Deve parecer TRANSMISSÃO RETRÔ + PLACAR DE ESTÁDIO.
 
 Estrutura:
 
-- campo central como papel tatico ou gramado impresso;
-- jogadores como pecas numeradas;
-- encaixe por posicao como pequenas etiquetas;
-- seletor de estrategia e esquema como controles de prancheta;
-- perfil coletivo como relatorio do auxiliar;
-- sinergias como notas rabiscadas e carimbos de estilo.
+- Placar enorme no topo.
+- Carimbo “AO VIVO”.
+- Campo 2D central com visual de prancheta/tático.
+- Jogadores como círculos numerados.
+- Setas táticas desenhadas.
+- Narração como ticker de rádio esportivo.
+- Eventos novos entrando como boletim urgente.
+- Estatísticas como pequenos cartões de transmissão.
+- Anúncios em placas laterais do campo, discretos.
+- Sem botão de pausar.
 
-Estrategias atuais:
+Texto obrigatório:
+“A partida continua no servidor mesmo se você sair.”
 
-- `Posse paciente`;
-- `Pressao alta`;
-- `Jogo vertical`;
-- `Equilibrio`.
+O campo 2D precisa ter personalidade:
 
-Nao invente novas regras de simulacao. Se renomear visualmente, mantenha o significado e os valores existentes.
+- linhas como desenho impresso;
+- textura de gramado ou papel tático;
+- placas nas laterais;
+- bolinhas numeradas;
+- destaque visual para posse da bola.
 
-O modal de troca de jogador deve parecer uma ficha aberta da prancheta, nao uma janela generica.
+6. Escalação e Tática
+   Deve parecer PRANCHETA DO TÉCNICO.
+   Nada de tabela seca.
+   Use:
 
-## Calendario: tabela de jogos e boletim de rodada
+- campo em papel/prancheta;
+- jogadores como peças;
+- cartões táticos;
+- setas desenhadas;
+- fitas adesivas;
+- notas rabiscadas;
+- barras de risco/recompensa.
 
-A tela `Calendario` deve parecer agenda de temporada e boletim de rodada.
+Mentalidades devem ter nomes visuais:
 
-Jogos futuros:
+- Retranca Total;
+- Cauteloso;
+- Equilíbrio;
+- Ataque Forte;
+- Pressão Total.
 
-- como bilhetes de confronto;
-- semana em destaque;
-- mandante e visitante em formato de placar pre-jogo.
+7. Elenco
+   Deve parecer ÁLBUM DE FIGURINHAS + FICHÁRIO DO CLUBE.
+   Jogadores não devem ser linhas comuns.
+   Use cards como figurinhas.
+   Cada jogador:
 
-Resultados:
+- avatar/silhueta;
+- nome fictício;
+- posição;
+- overall grande;
+- selos de habilidade;
+- barras de condição;
+- status como carimbo: “Titular”, “Lesionado”, “Suspenso”, “Promessa”.
 
-- como tiras de jornal ou etiquetas de resultado;
-- placar com tipografia condensada;
-- partidas ja jogadas com textura de carimbo `encerrado`.
+8. Mercado
+   Deve parecer CLASSIFICADOS ESPORTIVOS.
+   Use:
 
-## Tabela: classificacao impressa
+- jogadores como anúncios;
+- propostas como envelopes;
+- rumores como manchetes;
+- filtros como etiquetas;
+- valores como selos.
 
-A tela `Tabela` deve parecer tabela de liga publicada no jornal.
+9. Treinos
+   Deve parecer AGENDA SEMANAL DO CLUBE.
+   Use calendário visual, prancheta, notas, intensidade e alertas.
+   Não use apenas cards comuns.
 
-Direcao:
+10. Base
+    Deve parecer RELATÓRIO DE OLHEIROS.
+    Use fichas de jovens, carimbos de potencial, relatórios em papel, mapas/regiões fictícias.
 
-- linhas densas, legiveis e com divisorias fortes;
-- posicao em destaque;
-- clube do usuario marcado com faixa, selo ou fundo de recorte;
-- pontos e saldo com tipografia de placar;
-- criterios como rodape editorial ou caixa de regulamento.
+11. Estádio
+    Deve parecer PROJETO DE REFORMA + FOLHETO DO ESTÁDIO.
+    Use planta simplificada, arquibancadas, setores, melhorias como placas.
 
-Evite tabela moderna sem personalidade.
+12. Loja
+    Deve parecer CATÁLOGO RETRÔ DO CLUBE.
+    Produtos como páginas de catálogo:
 
-## Transferencias: classificados esportivos
+- uniformes;
+- mascotes;
+- escudos;
+- banners;
+- temas;
+- estádios;
+- placas.
 
-A tela `Transferencias` deve parecer classificados de jornal e mesa de negociacao.
+Mostrar aviso:
+“Cosméticos não dão vantagem competitiva.”
 
-Mercado:
+13. Admin
+    Admin deve ser separado visualmente.
+    Deve parecer ARQUIVO SECRETO / SALA DE CONTROLE.
+    Mais escuro, sério e técnico.
+    Use:
 
-- jogadores como anuncios de classificados;
-- valor como selo grande;
-- estilos como palavras-chave do anuncio;
-- botao comprar como etiqueta `Apresentar proposta`.
+- dossiês;
+- logs como fichas;
+- denúncias como processos;
+- botões como carimbos;
+- alertas críticos.
 
-Alvos:
+Componentes obrigatórios:
+Crie componentes reutilizáveis com nomes como:
 
-- destaque para filtros, oportunidades e observacoes como papeis presos;
-- sem marketplace generico.
+- NewspaperHeadline
+- TornPaperCard
+- StampBadge
+- LeaguePosterCard
+- FixturePoster
+- PlayerStickerCard
+- TacticalClipboard
+- RadioTicker
+- ScoreboardRetro
+- ClassifiedTransferCard
+- AdminDossierCard
+- MatchEventTape
+- StadiumAdBoard
+- PaperTable
 
-Vendas do elenco devem manter a metafora de carimbo/envelope de transferencia.
+Microinterações:
 
-## Base: relatorio de olheiros
-
-A tela `Base` deve parecer relatorio de observacao de jovens.
-
-Promessas:
-
-- jovens como fichas de olheiro;
-- potencial como carimbo grande;
-- idade e posicao como campos de formulario;
-- botao promover como selo de chamada ao profissional.
-
-Desenvolvimento:
-
-- explique crescimento como notas de acompanhamento;
-- use barras, carimbos e marcadores, nao graficos corporativos.
-
-## Componentes reutilizaveis sugeridos
-
-Crie componentes com nomes alinhados ao dominio visual, por exemplo:
-
-- `EditorialShell`
-- `NewspaperMasthead`
-- `PaperSectionTabs`
-- `NewspaperHeadline`
-- `TornPaperCard`
-- `StampBadge`
-- `FixturePoster`
-- `PlayerStickerCard`
-- `TacticalClipboard`
-- `PaperPitch`
-- `RadioTicker`
-- `ScoreboardNumber`
-- `ClassifiedTransferCard`
-- `ScoutReportCard`
-- `SponsorEnvelope`
-- `StadiumBlueprintCard`
-- `PaperTable`
-- `NewsStrip`
-- `SupporterNote`
-
-Nao e necessario criar todos de uma vez, mas a refatoracao deve caminhar nessa direcao e substituir os componentes genericos atuais (`Metric`, `InfoCard`, `ViewShell`) por equivalentes editoriais.
-
-## Microinteracoes
-
-Use microinteracoes discretas e tematicas:
-
-- figurinha levanta no hover;
+- card de jogador levanta como figurinha;
 - carimbo aparece com leve impacto;
-- poster de confronto ganha sombra de papel;
-- evento novo entra como tira de noticia;
-- placar ou numero importante pulsa levemente apos simulacao;
-- botao pressionado parece carimbo ou maquina;
-- abas parecem marcadores fisicos sendo selecionados.
+- novo evento da partida entra como fita de notícia;
+- placar pisca levemente quando há gol;
+- cartaz de liga tem hover com sombra de papel;
+- botão parece pressionado como máquina/carimbo.
 
-Evite animacoes longas, distrativas ou que prejudiquem leitura.
+Importante:
+A mudança precisa ser estrutural.
+Mude layout, componentes, hierarquia, formas, espaçamento e linguagem visual.
+Não aceite resultado que apenas altere cores.
 
-## Responsividade
+Critérios de aceitação:
 
-A experiencia precisa funcionar bem em mobile e desktop.
+- O dashboard parece capa de jornal, não dashboard.
+- A partida parece transmissão retrô, não painel de estatísticas.
+- O elenco parece álbum de figurinhas, não tabela comum.
+- As ligas parecem cartazes de campeonato, não cards SaaS.
+- A tática parece prancheta, não formulário.
+- O mercado parece classificados esportivos, não marketplace genérico.
+- O admin parece dossiê/sala de controle, não página comum.
+- A aplicação continua responsiva e utilizável.
+- O visual é ousado, vintage e memorável.
 
-Desktop:
+Tarefa:
+Refatore a UI existente com essa nova direção visual.
+Preserve as funcionalidades mockadas existentes.
+Não implemente backend.
+Não use dados reais.
+Não use clubes, jogadores, federações ou marcas reais.
+Use apenas nomes fictícios.
 
-- composicoes editoriais assimetricas;
-- sobreposicoes leves;
-- areas com largura variada;
-- campo/prancheta em destaque.
-
-Mobile:
-
-- recortes empilhados;
-- navegacao horizontal por abas;
-- manchetes ainda fortes, mas sem estourar;
-- tabelas com scroll ou condensacao cuidadosa;
-- botoes com area de toque confortavel.
-
-Textos nao podem sobrepor outros elementos nem sair dos seus containers.
-
-## Criterios de aceitacao
-
-- O dashboard parece capa de jornal esportivo, nao dashboard.
-- Clube parece ficha institucional, estadio/projeto e contratos, nao formularios genericos.
-- Historia parece arquivo/jornal/torcida, nao feed comum.
-- Elenco parece album de figurinhas, nao tabela de jogadores.
-- Tatica parece prancheta do tecnico, nao formulario.
-- Calendario parece boletim de rodada.
-- Tabela parece classificacao impressa.
-- Transferencias parecem classificados esportivos.
-- Base parece relatorio de olheiros.
-- A navegacao perdeu a aparencia de SaaS corporativo.
-- A aplicacao continua responsiva, utilizavel e jogavel.
-- Todas as funcionalidades mockadas existentes continuam preservadas.
-
-## Tarefa
-
-Refatore a UI existente com essa nova direcao visual.
-
-Preserve a simulacao e os dados mockados. Nao implemente backend. Nao busque dados reais. Use apenas nomes ficticios. A entrega esperada e uma interface completamente redesenhada com identidade forte de almanaque/jornal esportivo vintage interativo.
+Entrega esperada:
+Uma interface completamente redesenhada, com identidade visual forte de almanaque/jornal esportivo vintage interativo.
